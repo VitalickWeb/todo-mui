@@ -1,0 +1,23 @@
+/*.App {*/
+/*  padding: 30px;*/
+/*  display: flex;*/
+/*}*/
+
+/*.App > div {*/
+/*  margin-right: 50px;*/
+/*}*/
+/*.error {*/
+/*  border: 2px solid red;*/
+/*  outline: none;*/
+/*}*/
+/*.message {*/
+/*  color: red;*/
+/*}*/
+
+/*.active-filter {*/
+/*  background-color: rgba(130, 179, 228, 0.86);*/
+/*}*/
+
+/*.active-checked {*/
+/*  opacity: 0.5;*/
+/*}*/
