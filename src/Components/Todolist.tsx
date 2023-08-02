@@ -3,7 +3,8 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, List, PropTypes} from "@material-ui/core";
 import {WordFilter} from "../AppWithRedux";
-import {TaskWithRedux} from "../TaskWithRedux";
+import {Task} from "./Task";
+
 
 
 export type TaskType = {
@@ -45,9 +46,12 @@ console.log('todolist')
 
             return (
                 <li key={t.id} className={t.isDone ? 'active-checked' : ''}>
-                    <TaskWithRedux
+                    <Task
                         task={t}
                         todoListID={todoListID}
+                        removeTask={removeTask}
+                        changeStatus={changeStatus}
+                        changeTaskTitle={changeTaskTitle}
                     />
                 </li>
             )
