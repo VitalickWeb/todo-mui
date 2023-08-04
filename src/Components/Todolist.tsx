@@ -33,7 +33,7 @@ export const Todolist = React.memo(({
     filterTasks, changeStatus,
     changeTodolistTitle, changeTaskTitle, filter,
 }: TasksPropsType) => {
-console.log('todolist')
+
     let filteredTasks: TaskType[] = tasks;
 
     if (filter === 'active') {
@@ -124,9 +124,9 @@ console.log('todolist')
 
 type ButtonWithMemoPropsType = {
     title: string
-    size?: 'small' | 'medium' | 'large'
-    variant?: 'text' | 'outlined' | 'contained'
-    color?: PropTypes.Color
+    size: 'small' | 'medium' | 'large'
+    variant: 'text' | 'outlined' | 'contained'
+    color: PropTypes.Color
     onClick: () => void
 }
 
