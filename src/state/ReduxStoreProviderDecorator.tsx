@@ -11,12 +11,55 @@ const initialGlobalState = {
     ] ,
     tasks: {
         ["todolistId1"]: [
-            {id: v1(), title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: false}
+            {
+                id: v1(),
+                title: "HTML&CSS",
+                status: 2,
+                description: 'string',
+                todoListId: 'string',
+                order: 0,
+                priority: 0,
+                startDate: 'string',
+                deadline: 'string',
+                addedDate: 'string'
+            },
+            {
+                id: v1(),
+                title: "JS",
+                status: 0,
+                description: 'string',
+                todoListId: 'string',
+                order: 0,
+                priority: 0,
+                startDate: 'string',
+                deadline: 'string',
+                addedDate: 'string'
+            }
         ],
         ["todolistId2"]: [
-            {id: v1(), title: "Milk", isDone: false},
-            {id: v1(), title: "React Book", isDone: true}
+            {
+                id: v1(), title: "Milk",
+                status: 0,
+                description: 'string',
+                todoListId: 'string',
+                order: 0,
+                priority: 0,
+                startDate: 'string',
+                deadline: 'string',
+                addedDate: 'string'
+            },
+            {
+                id: v1(),
+                title: "React Book",
+                status: 2,
+                description: 'string',
+                todoListId: 'string',
+                order: 0,
+                priority: 0,
+                startDate: 'string',
+                deadline: 'string',
+                addedDate: 'string'
+            }
         ]
     }
 };

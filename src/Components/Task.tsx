@@ -2,13 +2,14 @@ import React, {ChangeEvent, useCallback} from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
-import {TaskType} from "./Todolist";
+import {TaskApiType, TaskStatuses} from "../API/todolist-api";
+
 
 export type TaskPropsType = {
-    task: TaskType
+    task: TaskApiType
     todoListID: string
     removeTask: (todoListID: string, taskId: string) => void
-    changeStatus: (todoListID: string, idStatus: string, isDone: boolean) => void
+    changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
     changeTaskTitle: (todoListID: string, idStatus: string, title: string) => void
 }
 
@@ -22,7 +23,10 @@ export const Task = React.memo(({
     }, [removeTask, todoListID, task.id])
 
     const changeStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        changeStatus(todoListID, task.id, e.currentTarget.checked)
+
+        let checked = e.currentTarget.checked === true ? TaskStatuses.Completed : TaskStatuses.InProgress
+        changeStatus(todoListID, task.id, checked)
+
     }, [changeStatus, todoListID, task.id])
 
     const changeTaskTitleHandler = useCallback((title: string) => {
@@ -34,7 +38,7 @@ export const Task = React.memo(({
             <Checkbox
                 value="checkedA"
                 inputProps={{'aria-label': 'Checkbox A'}}
-                checked={task.isDone}
+                checked={task.status === TaskStatuses.Completed}
                 onChange={changeStatusHandler}
                 color={'primary'}
             />

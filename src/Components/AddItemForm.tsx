@@ -7,7 +7,7 @@ export type AddItemFormPropsType = {
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) => {
     const [title, setTitle] = useState('')
-    const [error, setError] = useState<string | boolean>(false)//пока в переменной null ошибки нет
+    const [error, setError] = useState<string | boolean>(false)//пока в переменной error ошибки нет
 
     const changeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setError(false)//если символ будет добавлен в импуте, зануляем стэйт

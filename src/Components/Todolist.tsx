@@ -1,27 +1,25 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, List, PropTypes} from "@material-ui/core";
-import {WordFilter} from "../AppWithRedux";
+
 import {Task} from "./Task";
+import {WordFilter} from "../state/todoList-reducers";
+import {fetchTasksThunk} from "../state/tasks-redusers";
+import {useAppDispatch} from "../state/store";
+import {TaskApiType, TaskStatuses} from "../API/todolist-api";
 
 
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 export type TasksPropsType = {
     todoListID: string
     title: string
-    tasks: TaskType[]
+    tasks: TaskApiType[]
     removeTask: (todoListID: string, taskId: string) => void
     removeTodo: (todoListID: string) => void
-    addTask: (todoListID: string, title: string) => void
+    addTask: (title: string, todoListID: string) => void
     filterTasks: (todoListID: string, filter: WordFilter) => void
-    changeStatus: (todoListID: string, idStatus: string, isDone: boolean) => void
+    changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
     changeTaskTitle: (todoListID: string, idStatus: string, title: string) => void
     changeTodolistTitle: (todoListID: string, title: string) => void
     filter: string
@@ -34,18 +32,24 @@ export const Todolist = React.memo(({
     changeTodolistTitle, changeTaskTitle, filter,
 }: TasksPropsType) => {
 
-    let filteredTasks: TaskType[] = tasks;
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksThunk(todoListID));
+    }, [todoListID])
+
+    let filteredTasks: TaskApiType[] = tasks;
 
     if (filter === 'active') {
-        filteredTasks = tasks.filter((f: { isDone: boolean }) => !f.isDone)
+        filteredTasks = tasks.filter((f: { status: number }) => !f.status)
     } else if (filter === 'completed') {
-        filteredTasks = tasks.filter((f: { isDone: boolean }) => f.isDone)
+        filteredTasks = tasks.filter((f: { status: number }) => f.status)
     }
 
     const tasksRender = tasks.length ? filteredTasks.map(t => {
 
             return (
-                <li key={t.id} className={t.isDone ? 'active-checked' : ''}>
+                <li key={t.id} className={t.status ? 'active-checked' : ''}>
                     <Task
                         task={t}
                         todoListID={todoListID}
@@ -67,7 +71,7 @@ export const Todolist = React.memo(({
     }, [removeTodo, todoListID])
 
     const addTaskHandler = useCallback((title: string) => {
-        addTask(todoListID, title)
+        addTask(title, todoListID)
     }, [addTask, todoListID])
 
     const changeTodoTitleHandler = useCallback((newTitle: string) => {
