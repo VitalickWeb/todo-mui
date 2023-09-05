@@ -28,12 +28,8 @@ export const todoListReducers = (state: TodolistType[] = initialState, action: T
             return state.filter(tl => tl.id !== action.todoListID)
 
         case "ADD-TODOLIST":
-            const newTodolist: TodoListDomainType = {
-                id: action.todoListID,
-                title: action.title,
-                filter: 'all',
-            }
-            return [...state, newTodolist]
+            const newTodoList: TodoListDomainType = {...action.todoListID, filter: 'all'}
+            return [newTodoList, ...state]
 
         case "CHANGE-TODOLIST-TITLE":
             return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
@@ -57,8 +53,8 @@ export const todoListReducers = (state: TodolistType[] = initialState, action: T
 export const removeTodoListAC = (todoListID: string) => (
     {type: "REMOVE-TODOLIST", todoListID}
 ) as const
-export const addTodoListAC = (title: string, todoListID: string) => (
-    {type: "ADD-TODOLIST", title, todoListID}
+export const addTodoListAC = (todoListID: TodoType) => (
+    {type: "ADD-TODOLIST", todoListID}
 ) as const
 export const changeTodoListTitleAC = (title: string, todoListID: string) => (
     {type: "CHANGE-TODOLIST-TITLE", title, todoListID}
@@ -77,5 +73,23 @@ export const setTodoListsAC = (todoLists: TodoType[]) => (
 export const fetchTodoListsThunk = () => (dispatch: Dispatch) => {
     todolistAPI.getTodoLists().then((res) => {
         dispatch(setTodoListsAC(res.data));
+    })
+}
+
+export const deleteTodListTC = (todoListID: string) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodoLists(todoListID).then((res) => {
+        dispatch(removeTodoListAC(todoListID));
+    })
+}
+
+export const createTodListTC = (title: string) => (dispatch: Dispatch) => {
+    todolistAPI.createTodoLists(title).then((res) => {
+        dispatch(addTodoListAC(res.data.data.item));
+    })
+}
+
+export const updateTodListTitleTC = (title: string, todoListID: string) => (dispatch: Dispatch) => {
+    todolistAPI.updateTodoLists(todoListID, title).then((res) => {
+        dispatch(changeTodoListTitleAC(title, todoListID));
     })
 }

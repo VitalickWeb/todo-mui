@@ -10,7 +10,7 @@ export type TaskPropsType = {
     todoListID: string
     removeTask: (todoListID: string, taskId: string) => void
     changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
-    changeTaskTitle: (todoListID: string, idStatus: string, title: string) => void
+    changeTaskTitle: (todoListID: string, idStatus: string, newTitle: string) => void
 }
 
 export const Task = React.memo(({
@@ -24,13 +24,13 @@ export const Task = React.memo(({
 
     const changeStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 
-        let checked = e.currentTarget.checked === true ? TaskStatuses.Completed : TaskStatuses.InProgress
+        let checked = e.currentTarget.checked === true ? TaskStatuses.completed : TaskStatuses.inProgress
         changeStatus(todoListID, task.id, checked)
 
     }, [changeStatus, todoListID, task.id])
 
-    const changeTaskTitleHandler = useCallback((title: string) => {
-        changeTaskTitle(todoListID, task.id, title)
+    const changeTaskTitleHandler = useCallback((newTitle: string) => {
+        changeTaskTitle(todoListID, task.id, newTitle)
     }, [changeTaskTitle, todoListID, task.id])
 
     return (
@@ -38,7 +38,7 @@ export const Task = React.memo(({
             <Checkbox
                 value="checkedA"
                 inputProps={{'aria-label': 'Checkbox A'}}
-                checked={task.status === TaskStatuses.Completed}
+                checked={task.status === TaskStatuses.completed}
                 onChange={changeStatusHandler}
                 color={'primary'}
             />

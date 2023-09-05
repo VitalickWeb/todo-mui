@@ -1,18 +1,26 @@
 import {v1} from "uuid"
-import {ChangeTodoListAT, FilterTodoListAT, todoListReducers, WordFilter} from "./todoList-reducers";
+import {ChangeTodoListAT, FilterTodoListAT, setTodoListsAC, todoListReducers, WordFilter} from "./todoList-reducers";
 import {TodolistType} from "../AppWithRedux";
+import {TodoType} from "../API/todolist-api";
 
 let todoListID1: string
 let todoListID2: string
-let startState: Array<TodolistType>
+let startState: TodolistType[]
+let state: Array<TodoType>
+let action: TodoType
 
 beforeEach( () => {
     todoListID1 = v1()
     todoListID2 = v1()
 
     startState = <Array<TodolistType>>[
-        {id: todoListID1, title: 'what to learn', filter: 'all'},
-        {id: todoListID2, title: 'what to buy', filter: 'all'},
+        {id: todoListID1, title: 'what to learn', filter: 'all', addedDate: '', order: 0},
+        {id: todoListID2, title: 'what to buy', filter: 'all', addedDate: '', order: 0},
+    ]
+
+    state = <Array<TodoType>>[
+        {id: todoListID1, title: 'what to learn', addedDate: '', order: 0},
+        {id: todoListID2, title: 'what to buy', addedDate: '', order: 1},
     ]
 })
 
@@ -30,11 +38,11 @@ test('todolist should be added', () => {
     let newTodolistTitle = "New Todolist";
 
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
     ]
 
-    const endState = todoListReducers(startState,  {type: "ADD-TODOLIST", title: newTodolistTitle, todoListID: todoListID1})
+    const endState = todoListReducers(startState, {todoListID: action, type: "ADD-TODOLIST"})
 
     expect(endState.length).toBe(3);
     expect(endState[2].title).toBe(newTodolistTitle);
@@ -47,8 +55,8 @@ test('correct filter of todolist should be changed', () => {
     let newFilter: WordFilter = "completed";
 
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
     ]
 
     const action: FilterTodoListAT = {
@@ -70,8 +78,8 @@ test('correct todolist should change its name', () => {
     let newTodolistTitle = "New Todolist";
 
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
     ]
 
     const action: ChangeTodoListAT = {
@@ -84,4 +92,12 @@ test('correct todolist should change its name', () => {
 
     expect(endState[0].title).toBe("What to learn");
     expect(endState[1].title).toBe(newTodolistTitle);
+});
+
+test('todo lists should be set to the state', () => {
+    let action = setTodoListsAC(state)
+
+    const endState = todoListReducers([], action);
+
+    expect(endState.length).toBe(2);
 });

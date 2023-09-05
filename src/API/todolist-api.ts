@@ -30,8 +30,9 @@ export const todolistAPI = {
     getTodoLists(): Promise<AxiosResponse<TodoType[]>> {
         return instanceTodo.get(`todo-lists/`)
     },
-    createTodoLists(title: string): Promise<AxiosResponse<{item: TodoType}>> {
-        return instanceTodo.post(`todo-lists/`, {title: title})
+    createTodoLists(title: string) {
+        return instanceTodo.post<any, AxiosResponse<ResponseType<{item: TodoType}>>, {title: string}>
+        (`todo-lists/`,{title})
     },
     deleteTodoLists(todoListID: string): Promise<AxiosResponse<ResponseType>> {
         return instanceTodo.delete(`todo-lists/${todoListID}`)
@@ -52,17 +53,17 @@ const instanceTask = axios.create({
 
 export enum TaskStatuses {
     new = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3,
+    inProgress = 1,
+    completed = 2,
+    draft = 3,
 }
 
 export enum TaskPriorities {
-    Low = 0,
-    Middle = 1,
-    Hi = 2,
-    Urgently = 3,
-    Later = 4,
+    low = 0,
+    middle = 1,
+    hi = 2,
+    urgently = 3,
+    later = 4,
 }
 
 export type TaskApiType = {
@@ -96,13 +97,17 @@ export const taskAPI = {
     getTasks(todolistId: string): Promise<AxiosResponse<ResponseGetTaskType<TaskApiType[]>>> {
         return instanceTask.get(`todo-lists/${todolistId}/tasks`)
     },
-    createTasks(todolistId: string, title: string): Promise<AxiosResponse<ResponseType<{item: TaskApiType}>>> {
-        return instanceTask.post(`todo-lists/${todolistId}/tasks`, {title: title})
+    createTasks(todolistId: string, title: string) {
+        return instanceTask.post<any, AxiosResponse<ResponseType<{item: TaskApiType}>>, {title: string}>
+        (`todo-lists/${todolistId}/tasks`, {title: title})
     },
     deleteTasks(todoListId: string, taskId: string): Promise<AxiosResponse<ResponseType>> {
         return instanceTask.delete(`todo-lists/${todoListId}/tasks/${taskId}`)
     },
     updateTasks(todoListID: string, taskId: string, model: UpdateTaskModelType): Promise<AxiosResponse<ResponseType>> {
+        return instanceTask.put(`todo-lists/${todoListID}/tasks/${taskId}`, model)
+    },
+    updateTaskTitle(todoListID: string, taskId: string, model: UpdateTaskModelType): Promise<AxiosResponse<ResponseType>> {
         return instanceTask.put(`todo-lists/${todoListID}/tasks/${taskId}`, model)
     }
 }

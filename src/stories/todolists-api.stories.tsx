@@ -89,7 +89,7 @@ export const CreateTask = () => {
         // который в виде строки будем отображать в div-ке
         const todoListId = 'ecf92123-798f-4da8-830e-25f494aa4ad8'
 
-        taskAPI.createTasks(todoListId, 'NEW +==+==+==+ TASK')
+        taskAPI.createTasks(todoListId,'new title of task')
             .then((res) => {
                 setState(res.data);
             })

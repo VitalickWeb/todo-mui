@@ -1,25 +1,23 @@
 import React, {useCallback, useEffect} from 'react';
 import './AppWithRedux.css';
-import {v1} from "uuid";
 import {Todolist} from "./Components/Todolist";
 import {AddItemForm} from "./Components/AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography, LinearProgress} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
-    addTodoListAC,
-    changeTodoListTitleAC,
+    createTodListTC,
+    deleteTodListTC,
     fetchTodoListsThunk,
     filterTodoListAC,
-    removeTodoListAC,
+    updateTodListTitleTC,
     WordFilter,
 } from "./state/todoList-reducers";
 import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
     createTaskTC,
     deleteTaskTC,
-    TasksStateType
+    TasksStateType,
+    updateTaskStatusTC,
+    updateTaskTitleTC
 } from "./state/tasks-redusers";
 import {useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch} from "./state/store";
@@ -29,7 +27,8 @@ export type TodolistType = {
     id: string
     title: string
     filter: WordFilter
-
+    addedDate: string
+    order: number
 }
 
 export function AppWithRedux() {
@@ -74,14 +73,9 @@ export function AppWithRedux() {
         dispatch(deleteTaskTC(todoListID, taskId))
     }, [dispatch])
 
-    const addTask = useCallback((title: string, todoListID: string) => {
+    const addTask = useCallback(( title: string, todoListID: string) => {
         // let newTask = {id: v1(), title, isDone: false}
         // setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
-        // let newTask = {
-        //     id: v1(),
-        //     title: title,
-        //     isDone: false,
-        // }
         // setTasks([newTask, ...tasks])
         dispatch(createTaskTC(title, todoListID))
     }, [dispatch])
@@ -93,24 +87,24 @@ export function AppWithRedux() {
         // })
         // let newTask = tasks.map(t => t.id === idStatus ? {...t, isDone: isDone} : t)
         // setTasks(newTask)
-        dispatch(changeTaskStatusAC(todoListID, idStatus, status))
+        dispatch(updateTaskStatusTC(todoListID, idStatus, status))
     }, [dispatch])
 
-    const changeTaskTitle = useCallback((todoListID: string, idStatus: string, title: string) => {
+    const changeTaskTitle = useCallback((todoListID: string, idStatus: string, newTitle: string) => {
         // setTasks({...tasks, [todoListID]: tasks[todoListID].map(tl => tl.id === idStatus ? {...tl, title: title} : tl)})
-        dispatch(changeTaskTitleAC(idStatus, todoListID, title))
+        dispatch(updateTaskTitleTC(todoListID, idStatus, newTitle))
     }, [dispatch])
 
     const removeTodo = useCallback((todoListID: string) => {
         //setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         //delete tasks.todoListID
-        dispatch(removeTodoListAC(todoListID))
+        dispatch(deleteTodListTC(todoListID))
     }, [dispatch])
 
     const changeTodolistTitle = useCallback((todoListID: string, title: string) => {
         // setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title} : tl))
         // setFilter(filter)
-        dispatch(changeTodoListTitleAC(title, todoListID))
+        dispatch(updateTodListTitleTC(title, todoListID))
     }, [dispatch])
 
     const addTodolist = useCallback((title: string) => {
@@ -122,8 +116,8 @@ export function AppWithRedux() {
         // }
         // setTodoLists([...todoLists, newTodolist])
         // setTasks({...tasks, [newTodolistID]: []})
-        let id = v1()
-        dispatch(addTodoListAC(title, id))
+        //let id = v1()
+        dispatch(createTodListTC(title))
     }, [dispatch])
 
     const filterTasks = useCallback((todoListID: string, filter: WordFilter) => {
@@ -171,6 +165,7 @@ export function AppWithRedux() {
                     <Button color="inherit" variant={"outlined"}>Login</Button>
                 </Toolbar>
             </AppBar>
+            <LinearProgress color="secondary" />
             <Container fixed style={{padding: "20px 0"}}>
                 <Grid container>
                     <AddItemForm

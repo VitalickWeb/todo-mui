@@ -14,15 +14,15 @@ import {TaskApiType, TaskStatuses} from "../API/todolist-api";
 export type TasksPropsType = {
     todoListID: string
     title: string
+    filter: string
     tasks: TaskApiType[]
     removeTask: (todoListID: string, taskId: string) => void
     removeTodo: (todoListID: string) => void
     addTask: (title: string, todoListID: string) => void
     filterTasks: (todoListID: string, filter: WordFilter) => void
     changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
-    changeTaskTitle: (todoListID: string, idStatus: string, title: string) => void
+    changeTaskTitle: (todoListID: string, idStatus: string, newTitle: string) => void
     changeTodolistTitle: (todoListID: string, title: string) => void
-    filter: string
 }
 
 export const Todolist = React.memo(({
@@ -41,9 +41,9 @@ export const Todolist = React.memo(({
     let filteredTasks: TaskApiType[] = tasks;
 
     if (filter === 'active') {
-        filteredTasks = tasks.filter((f: { status: number }) => !f.status)
+        filteredTasks = tasks.filter((f: { status: number }) => f.status === TaskStatuses.new || f.status === TaskStatuses.inProgress)
     } else if (filter === 'completed') {
-        filteredTasks = tasks.filter((f: { status: number }) => f.status)
+        filteredTasks = tasks.filter((f: { status: number }) => f.status === TaskStatuses.completed)
     }
 
     const tasksRender = tasks.length ? filteredTasks.map(t => {
@@ -72,7 +72,7 @@ export const Todolist = React.memo(({
 
     const addTaskHandler = useCallback((title: string) => {
         addTask(title, todoListID)
-    }, [addTask, todoListID])
+    }, [addTask, title, todoListID])
 
     const changeTodoTitleHandler = useCallback((newTitle: string) => {
         changeTodolistTitle(todoListID, newTitle)

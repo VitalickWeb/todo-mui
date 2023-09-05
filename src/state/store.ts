@@ -5,7 +5,9 @@ import {useDispatch} from "react-redux";
 import {tasksReducer} from "./tasks-redusers";
 import {todoListReducers} from "./todoList-reducers";
 
+//В appReducer хранятся различные состояния по приложению
 export const rootReducer = combineReducers({
+    app: appReduser,
     tasks: tasksReducer,
     todoLists: todoListReducers,
 })
