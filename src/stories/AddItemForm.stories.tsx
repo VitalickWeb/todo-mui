@@ -1,5 +1,5 @@
 import type { StoryObj } from '@storybook/react';
-import {AddItemForm, AddItemFormPropsType} from '../Components/AddItemForm';
+import {AddItemForm, AddItemFormPropsType} from '../Components/AddItemForm/AddItemForm';
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import {action} from "@storybook/addon-actions";

@@ -2,7 +2,7 @@ import React from 'react';
 import './index.css';
 import {createTheme, CssBaseline, ThemeProvider} from "@material-ui/core";
 import {green, lime} from "@material-ui/core/colors";
-import {AppWithRedux} from "./AppWithRedux";
+import {App} from "./app/App";
 import {Provider} from "react-redux";
 import {store} from "./state/store";
 import {createRoot} from "react-dom/client";
@@ -33,7 +33,7 @@ const root = createRoot (
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <CssBaseline/>
-                <AppWithRedux />
+                <App />
             </Provider>
         </ThemeProvider>,
 );

@@ -1,6 +1,6 @@
 import {v1} from "uuid"
-import {ChangeTodoListAT, FilterTodoListAT, setTodoListsAC, todoListReducers, WordFilter} from "./todoList-reducers";
-import {TodolistType} from "../AppWithRedux";
+import {ChangeTodoListAT, FilterTodoListAT, setTodoListsAC, todoListReducers, WordFilter} from "../state/todoList-reducers";
+import {TodolistType} from "../app/App";
 import {TodoType} from "../API/todolist-api";
 
 let todoListID1: string
@@ -43,9 +43,9 @@ test('todolist should be added', () => {
     ]
 
     const endState = todoListReducers(startState, {todoListID: action, type: "ADD-TODOLIST"})
-
+    console.log(endState[0].title === newTodolistTitle)
     expect(endState.length).toBe(3);
-    expect(endState[2].title).toBe(newTodolistTitle);
+    expect(endState[0].title).toBe(newTodolistTitle);
 });
 
 test('correct filter of todolist should be changed', () => {

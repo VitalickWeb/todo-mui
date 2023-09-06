@@ -1,37 +1,42 @@
 import React, {useCallback, useEffect} from 'react';
-import './AppWithRedux.css';
-import {Todolist} from "./Components/Todolist";
-import {AddItemForm} from "./Components/AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography, LinearProgress} from "@material-ui/core";
+import './App.css';
+import {Todolist} from "../Components/TodoList/Todolist";
+import {AddItemForm} from "../Components/AddItemForm/AddItemForm";
+import {
+    AppBar,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    LinearProgress,
+    Paper,
+    Toolbar,
+    Typography
+} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
     createTodListTC,
     deleteTodListTC,
     fetchTodoListsThunk,
     filterTodoListAC,
+    TodoListDomainType,
     updateTodListTitleTC,
     WordFilter,
-} from "./state/todoList-reducers";
+} from "../state/todoList-reducers";
 import {
     createTaskTC,
     deleteTaskTC,
     TasksStateType,
     updateTaskStatusTC,
     updateTaskTitleTC
-} from "./state/tasks-redusers";
+} from "../state/tasks-redusers";
 import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "./state/store";
-import {TaskApiType} from "./API/todolist-api";
+import {AppRootStateType, useAppDispatch} from "../state/store";
+import {TaskApiType} from "../API/todolist-api";
 
-export type TodolistType = {
-    id: string
-    title: string
-    filter: WordFilter
-    addedDate: string
-    order: number
-}
 
-export function AppWithRedux() {
+
+export function App() {
     // const todoListID1 = v1()
     // const todoListID2 = v1()
     //
@@ -56,6 +61,41 @@ export function AppWithRedux() {
     //         {id: v1(), title: "Guitar", isDone: false},
     //     ],
     // })
+
+    return (
+        <>
+            <div className="App">
+                <AppBar position="static">
+                    <Toolbar style={{justifyContent: "space-between"}}>
+                        <IconButton edge="start" color="inherit" aria-label="menu">
+                            <Menu/>
+                        </IconButton>
+                        <Typography variant="h6">
+                            Todo-Lists
+                        </Typography>
+                        <Button color="inherit" variant={"outlined"}>Login</Button>
+                    </Toolbar>
+                </AppBar>
+                <LinearProgress color="secondary" />
+                <Container fixed style={{padding: "20px 0"}}>
+                    <TodoListsList />
+                </Container>
+            </div>
+        </>
+    );
+}
+
+export type TodolistType = {
+    id: string
+    title: string
+    filter: WordFilter
+    addedDate: string
+    order: number
+}
+export type TodoListsListPropsType = {
+}
+
+const TodoListsList: React.FC<TodoListsListPropsType> = () => {
 
     const todoLists = useSelector<AppRootStateType, TodolistType[]>( state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TasksStateType>( state => state.tasks)
@@ -136,8 +176,8 @@ export function AppWithRedux() {
                     <Todolist
                         todoListID={tl.id}
                         title={tl.title}
-                        tasks={filteredTasks}
                         filter={tl.filter}
+                        tasks={filteredTasks}
 
                         removeTask={removeTask}
                         addTask={addTask}
@@ -151,31 +191,16 @@ export function AppWithRedux() {
             </Grid>
         )
     })
-
     return (
-        <div className="App">
-            <AppBar position="static">
-                <Toolbar style={{justifyContent: "space-between"}}>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        Todo-Lists
-                    </Typography>
-                    <Button color="inherit" variant={"outlined"}>Login</Button>
-                </Toolbar>
-            </AppBar>
-            <LinearProgress color="secondary" />
-            <Container fixed style={{padding: "20px 0"}}>
-                <Grid container>
-                    <AddItemForm
-                        addItem={addTodolist}
-                    />
-                </Grid>
-                <Grid container spacing={5}>
-                    {todoListsComponents}
-                </Grid>
-            </Container>
-        </div>
-    );
+        <>
+            <Grid container>
+                <AddItemForm
+                    addItem={addTodolist}
+                />
+            </Grid>
+            <Grid container spacing={5}>
+                {todoListsComponents}
+            </Grid>
+        </>
+    )
 }
