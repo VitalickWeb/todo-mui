@@ -1,4 +1,4 @@
-import {TaskActionsType, TasksStateType} from "./tasks-redusers";
+import {TaskActionsType, TasksStateType} from "../features/TodoListsList/tasks-redusers";
 
 
 export const appReducer = (state: TasksStateType, action: TaskActionsType) => {

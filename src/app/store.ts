@@ -4,7 +4,7 @@ import thunk, {ThunkDispatch} from "redux-thunk";
 import {useDispatch} from "react-redux";
 import {tasksReducer} from "../features/TodoListsList/tasks-redusers";
 import {todoListReducers} from "../features/TodoListsList/todoList-reducers";
-import {appReducer} from "../features/TodoListsList/app-reducer";
+import {appReducer} from "./app-reducer";
 
 //В appReducer хранятся различные состояния по приложению
 export const rootReducer = combineReducers({
