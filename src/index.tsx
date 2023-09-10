@@ -4,7 +4,7 @@ import {createTheme, CssBaseline, ThemeProvider} from "@material-ui/core";
 import {green, lime} from "@material-ui/core/colors";
 import {App} from "./app/App";
 import {Provider} from "react-redux";
-import {store} from "./state/store";
+import {store} from "./app/store";
 import {createRoot} from "react-dom/client";
 
 

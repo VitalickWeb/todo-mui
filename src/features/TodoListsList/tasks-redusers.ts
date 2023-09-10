@@ -1,7 +1,7 @@
-import {AddTodoListAT, RemoveTodoListAT, setTodoListsAT} from "./todoList-reducers";
-import {taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../API/todolist-api";
+import {AddTodoListAT, RemoveTodoListAT, setTodoListsAT} from "../TodoListsList/todoList-reducers";
+import {taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../../API/todolist-api";
 import {Dispatch} from "redux";
-import {AppRootStateType} from "./store";
+import {AppRootStateType} from "../../app/store";
 
 export type TasksStateType = {
     [todoListID: string]: Array<TaskApiType>

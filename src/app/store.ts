@@ -2,9 +2,9 @@ import {AnyAction, applyMiddleware, combineReducers, legacy_createStore} from "r
 
 import thunk, {ThunkDispatch} from "redux-thunk";
 import {useDispatch} from "react-redux";
-import {tasksReducer} from "./tasks-redusers";
-import {todoListReducers} from "./todoList-reducers";
-import {appReducer} from "./app-reducer";
+import {tasksReducer} from "../features/TodoListsList/tasks-redusers";
+import {todoListReducers} from "../features/TodoListsList/todoList-reducers";
+import {appReducer} from "../features/TodoListsList/app-reducer";
 
 //В appReducer хранятся различные состояния по приложению
 export const rootReducer = combineReducers({
