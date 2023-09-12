@@ -1,3 +1,6 @@
+//Помним главное правило: все что мы видим на экране зависит от state,
+// ничего на экране не может измениться пока не изменились данные.
+
 import {AnyAction, applyMiddleware, combineReducers, legacy_createStore} from "redux";
 
 import thunk, {ThunkDispatch} from "redux-thunk";
@@ -6,9 +9,12 @@ import {tasksReducer} from "../features/TodoListsList/tasks-redusers";
 import {todoListReducers} from "../features/TodoListsList/todoList-reducers";
 import {appReducer} from "./app-reducer";
 
+// Поэтому, первым шагом, создадим еще один редьюсер для обработки состояния каких-то аспектов,
+// касающихся всего приложения, таких как: выбранный язык интерфейса, загружаются ли данные
+// или нет, кто именно сейчас залогинен в систему…
 //В appReducer хранятся различные состояния по приложению
 export const rootReducer = combineReducers({
-    //app: appReducer,
+    app: appReducer,
     tasks: tasksReducer,
     todoLists: todoListReducers,
 })
