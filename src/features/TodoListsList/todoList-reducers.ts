@@ -1,7 +1,7 @@
-import {todolistAPI, TodoType} from "../../API/todolist-api";
+import {ResultCode, todolistAPI, TodoType} from "../../API/todolist-api";
 import {Dispatch} from "redux";
 import {TodolistType} from "./TodoListsList";
-import {setStatusAC} from "../../app/app-reducer";
+import {setErrorAC, setStatusAC} from "../../app/app-reducer";
 
 const initialState: TodolistType[] = []
 
@@ -60,8 +60,17 @@ export const deleteTodListTC = (todoListID: string) => (dispatch: Dispatch) => {
 export const createTodListTC = (title: string) => (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
     todolistAPI.createTodoLists(title).then((res) => {
-        dispatch(addTodoListAC(res.data.data.item));
-        dispatch(setStatusAC('succeeded'))
+        if (res.data.resultCode === ResultCode.success) {
+            dispatch(addTodoListAC(res.data.data.item));
+            dispatch(setStatusAC('succeeded'))
+        } else {
+            res.data.messages.length
+                ? dispatch(setErrorAC(res.data.messages[0]))
+                : dispatch(setErrorAC('Some error occurred!'))
+
+            dispatch(setStatusAC('failed'))
+        }
+
     })
 }
 export const updateTodListTitleTC = (title: string, todoListID: string) => (dispatch: Dispatch) => {

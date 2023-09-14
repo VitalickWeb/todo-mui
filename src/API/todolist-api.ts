@@ -52,6 +52,11 @@ const instanceTask = axios.create({
 })
 
 // types
+export enum ResultCode {
+    success = 0,
+    error = 1,
+
+}
 export enum TaskStatuses {
     new = 0,
     inProgress = 1,
