@@ -97,8 +97,10 @@ export const createTaskTC = (title: string, todoListID: string) => (dispatch: Di
     dispatch(setStatusAC('loading'))
     taskAPI.createTasks(todoListID, title)
         .then((res) => {
-            dispatch(addTaskAC(res.data.data.item, todoListID))
-            dispatch(setStatusAC('succeeded'))
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item, todoListID))
+                dispatch(setStatusAC('succeeded'))
+            }
         })
 }
 export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>

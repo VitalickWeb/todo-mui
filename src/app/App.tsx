@@ -6,6 +6,8 @@ import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {RequestStatusType} from "./app-reducer";
+import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
+
 
 
 export function App() {
@@ -61,6 +63,7 @@ export function App() {
                     <TodoListsList />
 
                 </Container>
+                <ErrorSnackbar />
             </div>
         </>
     );
