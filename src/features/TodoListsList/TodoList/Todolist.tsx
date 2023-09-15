@@ -7,6 +7,7 @@ import {WordFilter} from "../todoList-reducers";
 import {fetchTasksThunk} from "../tasks-redusers";
 import {useAppDispatch} from "../../../app/store";
 import {TaskApiType, TaskStatuses} from "../../../API/todolist-api";
+import {RequestStatusType} from "../../../app/app-reducer";
 
 export type TasksPropsType = {
     todoListID: string
@@ -20,6 +21,7 @@ export type TasksPropsType = {
     changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
     changeTaskTitle: (todoListID: string, idStatus: string, newTitle: string) => void
     changeTodolistTitle: (todoListID: string, title: string) => void
+    entityStatus: RequestStatusType
 }
 
 export const Todolist = React.memo(({
@@ -27,6 +29,7 @@ export const Todolist = React.memo(({
     removeTask, removeTodo, addTask,
     filterTasks, changeStatus,
     changeTodolistTitle, changeTaskTitle, filter,
+    entityStatus,
 }: TasksPropsType) => {
 
     const dispatch = useAppDispatch()
@@ -87,6 +90,7 @@ export const Todolist = React.memo(({
                     size={'small'}
                     variant={'contained'}
                     color={'primary'}
+                    disabled={entityStatus === 'loading'}
                 >X</Button>
             </h3>
 

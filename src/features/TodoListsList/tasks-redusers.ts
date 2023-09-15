@@ -148,8 +148,16 @@ export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: 
                 startDate: task.startDate,
                 deadline: task.deadline
             })
-            dispatch(changeTaskTitleAC(todoListID, taskId, newTitle))
-            dispatch(setStatusAC('succeeded'))
+            if (res.data.resultCode === ResultCode.success) {
+                dispatch(changeTaskTitleAC(todoListID, taskId, newTitle))
+                dispatch(setStatusAC('succeeded'))
+            } else {
+                res.data.messages.length
+                    ? dispatch(setErrorAC(res.data.messages[0]))
+                    : dispatch(setErrorAC('Some error occurred!'))
+
+                dispatch(setStatusAC('failed'))
+            }
         }
     }
 

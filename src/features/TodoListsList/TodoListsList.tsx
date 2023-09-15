@@ -19,6 +19,7 @@ import {TaskApiType} from "../../API/todolist-api";
 import {Grid, Paper} from "@material-ui/core";
 import {Todolist} from "./TodoList/Todolist";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
+import {RequestStatusType} from "../../app/app-reducer";
 
 export type TodolistType = {
     id: string
@@ -26,6 +27,7 @@ export type TodolistType = {
     filter: WordFilter
     addedDate: string
     order: number
+    entityStatus: RequestStatusType;
 }
 export type TodoListsListPropsType = {
 }
@@ -116,6 +118,7 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
 
                         removeTask={removeTask}
                         addTask={addTask}
+                        entityStatus={tl.entityStatus}
                         filterTasks={filterTasks}
                         changeStatus={changeStatus}
                         changeTaskTitle={changeTaskTitle}

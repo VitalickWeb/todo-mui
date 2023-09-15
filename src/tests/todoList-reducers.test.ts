@@ -8,6 +8,7 @@ import {
 } from "../features/TodoListsList/todoList-reducers";
 import {TodolistType} from "../features/TodoListsList/TodoListsList";
 import {TodoType} from "../API/todolist-api";
+import {RequestStatusType} from "../app/app-reducer";
 
 let todoListID1: string
 let todoListID2: string
@@ -16,7 +17,7 @@ let todoListID3: string
 let startState: TodolistType[]
 let state: Array<TodoType>
 let todoList: TodoType
-
+let RequestStatus: RequestStatusType
 
 beforeEach( () => {
     todoListID1 = v1()
@@ -33,7 +34,7 @@ beforeEach( () => {
 test('correct todoList should be removed', () => {
     const endState = todoListReducers(startState, {type: "REMOVE-TODOLIST", todoListID: todoListID2})
 
-    expect(endState.length).toBe(2)
+    expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todoListID1)
 })
 
@@ -47,7 +48,8 @@ test('todolist should be added', () => {
             title: newTodolistTitle,
             filter: 'all',
             addedDate: '',
-            order: 0
+            order: 0,
+            entityStatus: RequestStatus
         }
     ]
 
@@ -65,8 +67,20 @@ test('correct filter of todolist should be changed', () => {
     let newFilter: WordFilter = "completed";
 
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {
+            id: todolistId1, title: "What to learn",
+            filter: "all",
+            addedDate: '',
+            order: 0,
+            entityStatus: RequestStatus
+        },
+        {
+            id: todolistId2,
+            title: "What to buy",
+            filter: "all",
+            addedDate: '',
+            order: 0,
+            entityStatus: RequestStatus}
     ]
 
     const action: FilterTodoListAT = {
@@ -88,8 +102,22 @@ test('correct todolist should change its name', () => {
     let newTodolistTitle = "New Todolist";
 
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {
+            id: todolistId1,
+            title: "What to learn",
+            filter: "all",
+            addedDate: '',
+            order: 0,
+            entityStatus: RequestStatus
+        },
+        {
+            id: todolistId2,
+            title: "What to buy",
+            filter: "all",
+            addedDate: '',
+            order: 0,
+            entityStatus: RequestStatus
+        }
     ]
 
     const action: ChangeTodoListAT = {
