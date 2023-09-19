@@ -1,8 +1,10 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 
+
 export type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) => {
@@ -42,6 +44,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) =>
                 onKeyDown={changeEnterTaskHandler}
                 error={!!error}
                 helperText={error && 'Title is required'}
+                disabled={props.disabled}
             />
 
             <Button style={ {
@@ -53,7 +56,8 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) =>
                 size={'small'}
                 variant={'contained'}
                 color={'primary'}
-            >+</Button>
+                disabled={props.disabled}>+
+            </Button>
         </div>
     )
 })

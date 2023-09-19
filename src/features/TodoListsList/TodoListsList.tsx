@@ -114,11 +114,11 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
                         todoListID={tl.id}
                         title={tl.title}
                         filter={tl.filter}
-                        tasks={filteredTasks}
+                        entityStatus={tl.entityStatus}
 
+                        tasks={filteredTasks}
                         removeTask={removeTask}
                         addTask={addTask}
-                        entityStatus={tl.entityStatus}
                         filterTasks={filterTasks}
                         changeStatus={changeStatus}
                         changeTaskTitle={changeTaskTitle}

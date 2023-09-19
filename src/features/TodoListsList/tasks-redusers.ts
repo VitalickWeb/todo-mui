@@ -1,4 +1,4 @@
-import {AddTodoListAT, RemoveTodoListAT, setTodoListsAT} from "../TodoListsList/todoList-reducers";
+import {AddTodoListAT, RemoveTodoListAT, SetTodoListsAT} from "../TodoListsList/todoList-reducers";
 import {ResultCode, taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../../API/todolist-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "../../app/store";
@@ -97,7 +97,7 @@ export const createTaskTC = (title: string, todoListID: string) => (dispatch: Di
     dispatch(setStatusAC('loading'))
     taskAPI.createTasks(todoListID, title)
         .then((res) => {
-            if (res.data.resultCode === ResultCode.success) {
+            if (res.data.resultCode === ResultCode.SUCCESS) {
                 dispatch(addTaskAC(res.data.data.item, todoListID))
                 dispatch(setStatusAC('succeeded'))
             } else {
@@ -107,6 +107,10 @@ export const createTaskTC = (title: string, todoListID: string) => (dispatch: Di
 
                 dispatch(setStatusAC('failed'))
             }
+        })
+        .catch( (e) => {
+            dispatch(setErrorAC(e.message))
+            dispatch(setStatusAC('failed'))
         })
 }
 export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>
@@ -130,17 +134,25 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
     dispatch(setStatusAC('loading'))
     taskAPI.updateTasks(todoListID, taskId, model)
         .then((res) => {
-            dispatch(changeTaskStatusAC(todoListID, taskId, status))
-            dispatch(setStatusAC('succeeded'))
+            if (res.data.resultCode === ResultCode.SUCCESS) {
+                dispatch(changeTaskStatusAC(todoListID, taskId, status))
+                dispatch(setStatusAC('succeeded'))
+            } else {
+                dispatch(setStatusAC('failed'))
+            }
+        })
+        .catch( (e) => {
+            dispatch(setErrorAC(e.message))
+            dispatch(setStatusAC('failed'))
         })
 }
 export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string) =>
-    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (dispatch: Dispatch, getState: () => AppRootStateType) => {
         dispatch(setStatusAC('loading'))
         const task = getState().tasks[todoListID].find((t) => t.id === taskId)
 
         if (task) {
-            const res = await taskAPI.updateTaskTitle(todoListID, taskId, {
+            const res = taskAPI.updateTaskTitle(todoListID, taskId, {
                 title: newTitle,
                 description: task.description,
                 status: task.status,
@@ -148,32 +160,40 @@ export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: 
                 startDate: task.startDate,
                 deadline: task.deadline
             })
-            if (res.data.resultCode === ResultCode.success) {
-                dispatch(changeTaskTitleAC(todoListID, taskId, newTitle))
-                dispatch(setStatusAC('succeeded'))
-            } else {
-                res.data.messages.length
-                    ? dispatch(setErrorAC(res.data.messages[0]))
-                    : dispatch(setErrorAC('Some error occurred!'))
+            .then((res) => {
+                if (res.data.resultCode === ResultCode.SUCCESS) {
+                    dispatch(changeTaskTitleAC(todoListID, taskId, newTitle))
+                    dispatch(setStatusAC('succeeded'))
+                } else {
+                    res.data.messages.length
+                        ? dispatch(setErrorAC(res.data.messages[0]))
+                        : dispatch(setErrorAC('Some error occurred!'))
 
+                    dispatch(changeTaskTitleAC(todoListID, taskId, 'ENTER CORRECT TITLE'))
+                    dispatch(setStatusAC('failed'))
+                }
+
+            })
+            .catch( (e) => {
+                dispatch(setErrorAC(e.message))
                 dispatch(setStatusAC('failed'))
-            }
+            })
         }
     }
 
 // Types
 export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
-export type addTaskAT = ReturnType<typeof addTaskAC>
-export type changeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
-export type changeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
-export type setTasksAT = ReturnType<typeof setTasksAC>
+export type AddTaskAT = ReturnType<typeof addTaskAC>
+export type ChangeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
+export type ChangeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
+export type SetTasksAT = ReturnType<typeof setTasksAC>
 
 export type TaskActionsType =
     | RemoveTaskAT
-    | addTaskAT
-    | changeTaskStatusAT
-    | changeTaskTitleAT
-    | setTasksAT
+    | AddTaskAT
+    | ChangeTaskStatusAT
+    | ChangeTaskTitleAT
+    | SetTasksAT
     | RemoveTodoListAT
     | AddTodoListAT
-    | setTodoListsAT
+    | SetTodoListsAT

@@ -96,6 +96,7 @@ export const Todolist = React.memo(({
 
             <AddItemForm
                 addItem={addTaskHandler}
+                disabled={entityStatus === 'loading'}
             />
 
             <List>
