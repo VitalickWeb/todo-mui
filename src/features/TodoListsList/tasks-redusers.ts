@@ -1,8 +1,17 @@
 import {AddTodoListAT, RemoveTodoListAT, SetTodoListsAT} from "../TodoListsList/todoList-reducers";
-import {ResultCode, taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../../API/todolist-api";
+import {
+    ResponseType,
+    ResultCode,
+    taskAPI,
+    TaskApiType,
+    TaskStatuses,
+    UpdateTaskModelType
+} from "../../API/todolist-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "../../app/store";
-import {setErrorAC, setStatusAC} from "../../app/app-reducer";
+import {setErrorAC, SetErrorAT, setStatusAC, SetStatusAT} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {AxiosResponse} from "axios";
 
 export type TasksStateType = {
     [todoListID: string]: Array<TaskApiType>
@@ -79,21 +88,35 @@ export const setTasksAC = (tasksApi: TaskApiType[], todoListIdApi: string) => ({
 // Thunks
 export const fetchTasksThunk = (todoListID: string) => (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
-    taskAPI.getTasks(todoListID).then((res) => {
-        const tasks = res.data.items
-        dispatch(setTasksAC(tasks, todoListID))
-        dispatch(setStatusAC('succeeded'))
-    })
+    taskAPI.getTasks(todoListID)
+        .then((res) => {
+            if (res.data.error === null) {
+                dispatch(setTasksAC(res.data.items, todoListID))
+                dispatch(setStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data.error, dispatch)
+            }
+        })
+        .catch((e) => {
+            handleServerNetworkError(e.message, dispatch)
+        })
 }
 export const deleteTaskTC = (todoListId: string, taskId: string) => (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
     taskAPI.deleteTasks(todoListId, taskId)
         .then((res) => {
-            dispatch(removeTaskAC(todoListId, taskId))
-            dispatch(setStatusAC('succeeded'))
+            if (res.data.resultCode === ResultCode.SUCCESS) {
+                dispatch(removeTaskAC(todoListId, taskId))
+                dispatch(setStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((e) => {
+            handleServerNetworkError(e.message, dispatch)
         })
 }
-export const createTaskTC = (title: string, todoListID: string) => (dispatch: Dispatch) => {
+export const createTaskTC = (title: string, todoListID: string) => (dispatch: Dispatch<TaskActionsType>) => {
     dispatch(setStatusAC('loading'))
     taskAPI.createTasks(todoListID, title)
         .then((res) => {
@@ -101,16 +124,11 @@ export const createTaskTC = (title: string, todoListID: string) => (dispatch: Di
                 dispatch(addTaskAC(res.data.data.item, todoListID))
                 dispatch(setStatusAC('succeeded'))
             } else {
-                res.data.messages.length
-                    ? dispatch(setErrorAC(res.data.messages[0]))
-                    : dispatch(setErrorAC('Some error occurred!'))
-
-                dispatch(setStatusAC('failed'))
+                handleServerAppError<{item: TaskApiType}>(res.data, dispatch)
             }
         })
         .catch( (e) => {
-            dispatch(setErrorAC(e.message))
-            dispatch(setStatusAC('failed'))
+            handleServerNetworkError(e.message, dispatch)
         })
 }
 export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>
@@ -138,12 +156,11 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
                 dispatch(changeTaskStatusAC(todoListID, taskId, status))
                 dispatch(setStatusAC('succeeded'))
             } else {
-                dispatch(setStatusAC('failed'))
+                handleServerAppError(res.data, dispatch)
             }
         })
         .catch( (e) => {
-            dispatch(setErrorAC(e.message))
-            dispatch(setStatusAC('failed'))
+            handleServerNetworkError(e.message, dispatch)
         })
 }
 export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string) =>
@@ -165,18 +182,12 @@ export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: 
                     dispatch(changeTaskTitleAC(todoListID, taskId, newTitle))
                     dispatch(setStatusAC('succeeded'))
                 } else {
-                    res.data.messages.length
-                        ? dispatch(setErrorAC(res.data.messages[0]))
-                        : dispatch(setErrorAC('Some error occurred!'))
-
                     dispatch(changeTaskTitleAC(todoListID, taskId, 'ENTER CORRECT TITLE'))
-                    dispatch(setStatusAC('failed'))
+                    handleServerAppError(res.data, dispatch)
                 }
-
             })
             .catch( (e) => {
-                dispatch(setErrorAC(e.message))
-                dispatch(setStatusAC('failed'))
+                handleServerNetworkError(e.message, dispatch)
             })
         }
     }
@@ -197,3 +208,5 @@ export type TaskActionsType =
     | RemoveTodoListAT
     | AddTodoListAT
     | SetTodoListsAT
+    | SetStatusAT
+    | SetErrorAT

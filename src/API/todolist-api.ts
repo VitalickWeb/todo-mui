@@ -70,6 +70,7 @@ export enum TaskPriorities {
     urgently = 3,
     later = 4,
 }
+
 export type TaskApiType = {
     "id": string
     "title": string
@@ -105,8 +106,8 @@ export const taskAPI = {
         return instanceTask.post<any, AxiosResponse<ResponseType<{item: TaskApiType}>>, {title: string}>
         (`todo-lists/${todolistId}/tasks`, {title: title})
     },
-    deleteTasks(todoListId: string, taskId: string): Promise<AxiosResponse<ResponseType>> {
-        return instanceTask.delete(`todo-lists/${todoListId}/tasks/${taskId}`)
+    deleteTasks(todoListId: string, taskId: string) {
+        return instanceTask.delete<any, AxiosResponse<ResponseType>>(`todo-lists/${todoListId}/tasks/${taskId}`)
     },
     updateTasks(todoListID: string, taskId: string, model: UpdateTaskModelType): Promise<AxiosResponse<ResponseType>> {
         return instanceTask.put(`todo-lists/${todoListID}/tasks/${taskId}`, model)
