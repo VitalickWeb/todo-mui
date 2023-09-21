@@ -84,6 +84,7 @@ export const Todolist = React.memo(({
                 <EditableSpan
                     title={title}
                     changeTitle={changeTodoTitleHandler}
+                    disabled={entityStatus === 'loading'}
                 />
                 <Button
                     onClick={removeTodoListHandler}
