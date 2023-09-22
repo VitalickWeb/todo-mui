@@ -4,13 +4,13 @@ import {TextField} from "@material-ui/core";
 export type EditableSpanPropsType = {
     title: string
     changeTitle: (title: string) => void
-    disabled?: boolean
+    disabled: boolean
 }
 
 export const EditableSpan = React.memo(({
     title, changeTitle, disabled
 }: EditableSpanPropsType) => {
-
+console.log(disabled)
     const [editeMode, setEditMode] = useState<boolean>(false)
     const [localTitle, setLocalTitle] = useState<string>(title)
 
@@ -40,7 +40,7 @@ export const EditableSpan = React.memo(({
                 onChange={changeAddTaskHandler}
                 onBlur={offEditMode}
                 size={'small'}
-                disabled={!disabled}
+                disabled={disabled}
             />
             : <span onDoubleClick={onEditMod}>{title}</span>//если не включен то спан
     )

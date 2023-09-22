@@ -1,17 +1,9 @@
 import {AddTodoListAT, RemoveTodoListAT, SetTodoListsAT} from "../TodoListsList/todoList-reducers";
-import {
-    ResponseType,
-    ResultCode,
-    taskAPI,
-    TaskApiType,
-    TaskStatuses,
-    UpdateTaskModelType
-} from "../../API/todolist-api";
+import {ResultCode, taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../../API/todolist-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "../../app/store";
-import {setErrorAC, SetErrorAT, setStatusAC, SetStatusAT} from "../../app/app-reducer";
+import {RequestStatusType, SetErrorAT, setStatusAC, SetStatusAT} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {AxiosResponse} from "axios";
 
 export type TasksStateType = {
     [todoListID: string]: Array<TaskApiType>
@@ -52,17 +44,18 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
             let copyState = {...state}
             delete copyState[action.todoListID]
             return copyState
-        case 'SET-TODO-LISTS': {
+        case 'SET-TODO-LISTS':
             const stateCopy = {...state}
             action.todoLists.forEach((tl) => {
                 stateCopy[tl.id] = []
             })
             return stateCopy;
-        }
         case 'SET-TASKS':
-            const stateCopy = {...state}
-            stateCopy[action.todoListIdApi] = action.tasksApi
-            return stateCopy
+            const stateCopy2 = {...state}
+            stateCopy2[action.todoListIdApi] = action.tasksApi
+            return stateCopy2
+        // case "CHANGE-TASKS-ENTITY-STATUS":
+
 
         default:
             return state//если ошибка вернет state
@@ -84,7 +77,9 @@ export const changeTaskTitleAC = (todoListID: string, idStatus: string, newTitle
 export const setTasksAC = (tasksApi: TaskApiType[], todoListIdApi: string) => ({
     type: "SET-TASKS", tasksApi, todoListIdApi}
 ) as const
-
+export const ChangeTaskEntityStatusAT = (todoListID: string, taskId: string, status: RequestStatusType) => ({
+        type: "CHANGE-TASKS-ENTITY-STATUS", todoListID, taskId, status}
+) as const
 // Thunks
 export const fetchTasksThunk = (todoListID: string) => (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
@@ -210,3 +205,6 @@ export type TaskActionsType =
     | SetTodoListsAT
     | SetStatusAT
     | SetErrorAT
+export type TaskDomainType = TasksStateType & {
+    entityStatus: RequestStatusType
+}

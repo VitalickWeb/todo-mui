@@ -11,11 +11,12 @@ export type TaskPropsType = {
     removeTask: (todoListID: string, taskId: string) => void
     changeStatus: (todoListID: string, idStatus: string, status: TaskStatuses) => void
     changeTaskTitle: (todoListID: string, idStatus: string, newTitle: string) => void
+    disabled: boolean
 }
 
 export const Task = React.memo(({
     task, todoListID,
-    removeTask, changeTaskTitle, changeStatus
+    removeTask, changeTaskTitle, changeStatus, disabled
 }: TaskPropsType) => {
 
     const clickRemoveHandler = useCallback(() => {
@@ -46,6 +47,7 @@ export const Task = React.memo(({
             <EditableSpan
                 title={task.title}
                 changeTitle={changeTaskTitleHandler}
+                disabled={disabled}
             />
 
             <IconButton

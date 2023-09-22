@@ -21,6 +21,7 @@ const meta = {
         removeTask: action('delete task'),
         changeStatus: action('change task status'),
         changeTaskTitle: action('change title'),
+        disabled: true
     }
 };
 export default meta;
