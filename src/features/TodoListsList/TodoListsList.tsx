@@ -1,7 +1,8 @@
 import {
     createTodListTC,
     deleteTodListTC,
-    fetchTodoListsThunk, filterTodoListAC,
+    fetchTodoListsThunk,
+    filterTodoListAC,
     updateTodListTitleTC,
     WordFilter
 } from "./todoList-reducers";
@@ -11,11 +12,11 @@ import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {
     createTaskTC,
     deleteTaskTC,
+    TaskDomainType,
     TasksStateType,
     updateTaskStatusTC,
     updateTaskTitleTC
 } from "./tasks-redusers";
-import {TaskApiType} from "../../API/todolist-api";
 import {Grid, Paper} from "@material-ui/core";
 import {Todolist} from "./TodoList/Todolist";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
@@ -105,7 +106,7 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
 
     //UI:
     const todoListsComponents = todoLists.map((tl: TodolistType) => {
-        let filteredTasks: Array<TaskApiType> = tasks[tl.id];
+        let filteredTasks: Array<TaskDomainType> = tasks[tl.id];
 
         return (
             <Grid item key={tl.id}>

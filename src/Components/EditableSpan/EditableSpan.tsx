@@ -10,7 +10,7 @@ export type EditableSpanPropsType = {
 export const EditableSpan = React.memo(({
     title, changeTitle, disabled
 }: EditableSpanPropsType) => {
-console.log(disabled)
+
     const [editeMode, setEditMode] = useState<boolean>(false)
     const [localTitle, setLocalTitle] = useState<string>(title)
 
@@ -40,7 +40,6 @@ console.log(disabled)
                 onChange={changeAddTaskHandler}
                 onBlur={offEditMode}
                 size={'small'}
-                disabled={disabled}
             />
             : <span onDoubleClick={onEditMod}>{title}</span>//если не включен то спан
     )

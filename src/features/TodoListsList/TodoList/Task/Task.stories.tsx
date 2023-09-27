@@ -2,7 +2,6 @@ import type {StoryObj} from '@storybook/react';
 import React from "react";
 import {action} from "@storybook/addon-actions";
 import {Task} from "./Task";
-import {TaskPriorities, TaskStatuses} from "../../../../API/todolist-api";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -21,6 +20,7 @@ const meta = {
         removeTask: action('delete task'),
         changeStatus: action('change task status'),
         changeTaskTitle: action('change title'),
+        entityStatus: 'idle',
         disabled: true
     }
 };

@@ -11,22 +11,23 @@ import {setTodoListsAC} from "../features/TodoListsList/todoList-reducers";
 
 let startState: TasksStateType
 
+
 beforeEach( () => {
     startState = {
         "todoListId1": [
-            { id: '1', title: "CSS", description: '', addedDate: '', deadline: '',
+            { id: '1', title: "CSS", description: '', addedDate: '', deadline: '', entityStatus: 'idle',
         status: TaskStatuses.new, order: 0, priority: TaskPriorities.low, startDate: '', todoListId: ''},
-            { id: '2', title: "JS", description: '', todoListId: '', order: 0,
+            { id: '2', title: "JS", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.completed, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''},
-            { id: '3', title: "React", description: '', todoListId: '', order: 0,
-        status: TaskStatuses.new, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''}
+            { id: '3', title: "React", description: '', todoListId: '', order: 0, entityStatus: 'idle',
+        status: TaskStatuses.new, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''},
         ],
         "todoListId2": [
-            { id: '1', title: "bread", description: '', addedDate: '', deadline: '',
+            { id: '1', title: "bread", description: '', addedDate: '', deadline: '', entityStatus: 'idle',
         status: TaskStatuses.new, order: 0, priority: TaskPriorities.low, startDate: '', todoListId: ''},
-            { id: '2', title: "milk", description: '', todoListId: '', order: 0,
+            { id: '2', title: "milk", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.new, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''},
-            { id: '3', title: "tea", description: '', todoListId: '', order: 0,
+            { id: '3', title: "tea", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.completed, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''
             }
         ]
@@ -39,17 +40,17 @@ test('correct task should be deleted from correct array', () => {
 
     expect(endState).toEqual({
         "todoListId1": [
-            { id: '1', title: "CSS", description: '', addedDate: '', deadline: '',
+            { id: '1', title: "CSS", description: '', addedDate: '', deadline: '', entityStatus: 'idle',
         status: TaskStatuses.new, order: 0, priority: TaskPriorities.low, startDate: '', todoListId: ''},
-            { id: '2', title: "JS", description: '', todoListId: '', order: 0,
+            { id: '2', title: "JS", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.completed, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''},
-            { id: '3', title: "React", description: '', todoListId: '', order: 0,
+            { id: '3', title: "React", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.new, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''}
         ],
         "todoListId2": [
-            { id: '1', title: "bread", description: '', addedDate: '', deadline: '',
+            { id: '1', title: "bread", description: '', addedDate: '', deadline: '', entityStatus: 'idle',
         status: TaskStatuses.new, order: 0, priority: TaskPriorities.low, startDate: '', todoListId: ''},
-            { id: '3', title: "tea", description: '', todoListId: '', order: 0,
+            { id: '3', title: "tea", description: '', todoListId: '', order: 0, entityStatus: 'idle',
         status: TaskStatuses.completed, priority: TaskPriorities.low, startDate: '', deadline: '', addedDate: ''},
         ]
     });
@@ -95,7 +96,7 @@ test('status of specified task should be changed', () => {
 test('new title should be added', () => {
     const action = changeTaskTitleAC("1","todoListId2","Reducers");
     const endState = tasksReducer(startState, action)
-
+    console.log(startState, action)
     expect(endState["todoListId1"][0].title).toBe("CSS");
     expect(endState["todoListId2"][0].title).toBe("Reducers");
 });

@@ -4,16 +4,16 @@ import {EditableSpan} from "../../../Components/EditableSpan/EditableSpan";
 import {Button, List, PropTypes} from "@material-ui/core";
 import {Task} from "./Task/Task";
 import {WordFilter} from "../todoList-reducers";
-import {fetchTasksThunk} from "../tasks-redusers";
+import {fetchTasksThunk, TaskDomainType} from "../tasks-redusers";
 import {useAppDispatch} from "../../../app/store";
-import {TaskApiType, TaskStatuses} from "../../../API/todolist-api";
+import {TaskStatuses} from "../../../API/todolist-api";
 import {RequestStatusType} from "../../../app/app-reducer";
 
 export type TasksPropsType = {
     todoListID: string
     title: string
     filter: string
-    tasks: TaskApiType[]
+    tasks: TaskDomainType[]
     removeTask: (todoListID: string, taskId: string) => void
     removeTodo: (todoListID: string) => void
     addTask: (title: string, todoListID: string) => void
@@ -38,7 +38,7 @@ export const Todolist = React.memo(({
         dispatch(fetchTasksThunk(todoListID));
     }, [todoListID])
 
-    let filteredTasks: TaskApiType[] = tasks;
+    let filteredTasks = tasks;
 
     if (filter === 'active') {
         filteredTasks = tasks.filter((f: { status: number }) => f.status === TaskStatuses.new || f.status === TaskStatuses.inProgress)
@@ -56,7 +56,8 @@ export const Todolist = React.memo(({
                         removeTask={removeTask}
                         changeStatus={changeStatus}
                         changeTaskTitle={changeTaskTitle}
-                        disabled={entityStatus === 'loading'}
+                        disabled={t.entityStatus === 'loading'}
+                        entityStatus={t.entityStatus}
                     />
                 </li>
             )
