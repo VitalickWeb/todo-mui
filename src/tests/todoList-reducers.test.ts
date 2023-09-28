@@ -25,8 +25,8 @@ beforeEach( () => {
     todoListID3 = v1()
 
     startState = <Array<TodolistType>>[
-        {id: todoListID1, title: 'what to learn', filter: 'all', addedDate: '', order: 0},
-        {id: todoListID2, title: 'what to buy', filter: 'all', addedDate: '', order: 0},
+        {id: todoListID1, title: 'what to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: todoListID2, title: 'what to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
     ]
 
 })
@@ -133,7 +133,7 @@ test('correct todolist should change its name', () => {
 });
 
 test('todo lists should be set to the state', () => {
-    let action = setTodoListsAC(state)
+    let action = setTodoListsAC(startState)
 
     const endState = todoListReducers([], action);
 

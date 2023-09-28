@@ -70,7 +70,7 @@ export const changeTaskStatusAC = (todoListID: string, idStatus: string, status:
     return {type: 'UPDATE-TASK-STATUS', todoListID, idStatus, status} as const
 }
 export const changeTaskTitleAC = (todoListID: string, idStatus: string, newTitle: string) => {
-    return {type: 'UPDATE-TASK-TITLE', idStatus, todoListID, newTitle} as const
+    return {type: 'UPDATE-TASK-TITLE', todoListID, idStatus, newTitle} as const
 }
 export const setTasksAC = (tasksApi: TaskApiType[], todoListIdApi: string) => ({
     type: "SET-TASKS", tasksApi, todoListIdApi}

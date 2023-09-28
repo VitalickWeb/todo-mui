@@ -94,9 +94,9 @@ test('status of specified task should be changed', () => {
 })
 
 test('new title should be added', () => {
-    const action = changeTaskTitleAC("1","todoListId2","Reducers");
+    const action = changeTaskTitleAC("todoListId2","1","Reducers");
     const endState = tasksReducer(startState, action)
-    console.log(startState, action)
+
     expect(endState["todoListId1"][0].title).toBe("CSS");
     expect(endState["todoListId2"][0].title).toBe("Reducers");
 });
