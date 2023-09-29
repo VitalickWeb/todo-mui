@@ -15,7 +15,6 @@ let todoListID2: string
 let todoListID3: string
 
 let startState: TodolistType[]
-let state: Array<TodoType>
 let todoList: TodoType
 let RequestStatus: RequestStatusType
 
