@@ -9,7 +9,6 @@ import {RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
 
 
-
 export function App() {
     // const todoListID1 = v1()
     // const todoListID2 = v1()

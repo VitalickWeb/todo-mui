@@ -263,7 +263,7 @@ export type TaskDomainType = TaskApiType & {
 }
 
 //типизация ошибок
-type ErrorType = {
+export type ErrorType = {
     'statusCode': number
     messages: [
         {
