@@ -3,6 +3,8 @@ import { Dispatch } from 'redux'
 import { ResponseType } from '../API/todolist-api'
 
 // generic function
+//типизация generic function, когда нужно взять какой то <T> то принимает он его перед скобками параметров
+//функции.
 export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ErrorUtilsDispatchType) => {
     if (data.messages.length) {
         dispatch(setErrorAC(data.messages[0]))
@@ -17,4 +19,4 @@ export const handleServerNetworkError = (error: string, dispatch: ErrorUtilsDisp
     dispatch(setStatusAC('failed'))
 }
 
-type ErrorUtilsDispatchType = Dispatch<SetErrorAT | SetStatusAT>
+export type ErrorUtilsDispatchType = Dispatch<SetErrorAT | SetStatusAT>
