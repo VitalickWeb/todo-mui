@@ -82,7 +82,7 @@ export const ChangeTaskEntityStatusAC = (todoListID: string, taskId: string, sta
         type: "CHANGE-TASKS-ENTITY-STATUS", todoListID, taskId, status}
 ) as const
 // Thunks
-export const fetchTasksThunk = (todoListID: string) => async (dispatch: Dispatch) => {
+export const fetchTasksThunk = (todoListID: string) => async (dispatch: Dispatch<TaskActionsType>) => {
     dispatch(setStatusAC('loading'))
 
     try {
@@ -147,15 +147,16 @@ export const createTaskTC = (title: string, todoListID: string) => async (dispat
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)
-            return;
+            return Promise.reject(error); // Вернуть Promise с ошибкой
         }
         const error = (e as Error).message
         handleServerNetworkError(error, dispatch)
+        return Promise.reject(error); // Вернуть Promise с ошибкой
     }
 }
 
 export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>
-    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
         const task = getState().tasks[todoListID].find((t) => t.id === taskId)
 
         if (!task) {
@@ -197,7 +198,7 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
 
 
 export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string) =>
-    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
         dispatch(setStatusAC('loading'))
         dispatch(ChangeTaskEntityStatusAC(todoListID, taskId, 'loading'))
 

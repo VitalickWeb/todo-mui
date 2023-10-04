@@ -44,48 +44,48 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
         dispatch(fetchTodoListsThunk());
     }, [])
 
-    const removeTask = useCallback((todoListID: string, taskId: string) => {
+    const removeTask = useCallback(async (todoListID: string, taskId: string) => {
         // setTasks({...tasks, [todoListID]: tasks[todoListID].filter(t => t.id !== taskId)})
         // let remove = tasks.filter(del => del.id !== taskId)
         // setTasks(remove)
-        dispatch(deleteTaskTC(todoListID, taskId))
+        await dispatch(deleteTaskTC(todoListID, taskId))
     }, [dispatch])
 
-    const addTask = useCallback(( title: string, todoListID: string) => {
+    const addTask = useCallback(async ( title: string, todoListID: string) => {
         // let newTask = {id: v1(), title, isDone: false}
         // setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
         // setTasks([newTask, ...tasks])
-        dispatch(createTaskTC(title, todoListID))
+        await dispatch(createTaskTC(title, todoListID))
     }, [dispatch])
 
-    const changeStatus = useCallback((todoListID: string, idStatus: string, status: number) => {
+    const changeStatus = useCallback(async(todoListID: string, idStatus: string, status: number) => {
         // setTasks({
         //     ...tasks,
         //     [todoListID]: tasks[todoListID].map(tl => tl.id === idStatus ? {...tl, isDone: isDone} : tl)
         // })
         // let newTask = tasks.map(t => t.id === idStatus ? {...t, isDone: isDone} : t)
         // setTasks(newTask)
-        dispatch(updateTaskStatusTC(todoListID, idStatus, status))
+        await dispatch(updateTaskStatusTC(todoListID, idStatus, status))
     }, [dispatch])
 
-    const changeTaskTitle = useCallback((todoListID: string, idStatus: string, newTitle: string) => {
+    const changeTaskTitle = useCallback(async (todoListID: string, idStatus: string, newTitle: string) => {
         // setTasks({...tasks, [todoListID]: tasks[todoListID].map(tl => tl.id === idStatus ? {...tl, title: title} : tl)})
-        dispatch(updateTaskTitleTC(todoListID, idStatus, newTitle))
+        await dispatch(updateTaskTitleTC(todoListID, idStatus, newTitle))
     }, [dispatch])
 
-    const removeTodo = useCallback((todoListID: string) => {
+    const removeTodo = useCallback(async (todoListID: string) => {
         //setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         //delete tasks.todoListID
-        dispatch(deleteTodListTC(todoListID))
+        await dispatch(deleteTodListTC(todoListID))
     }, [dispatch])
 
-    const changeTodolistTitle = useCallback((todoListID: string, title: string) => {
+    const changeTodolistTitle = useCallback(async (todoListID: string, title: string) => {
         // setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title} : tl))
         // setFilter(filter)
-        dispatch(updateTodListTitleTC(title, todoListID))
+        await dispatch(updateTodListTitleTC(title, todoListID))
     }, [dispatch])
 
-    const addTodolist = useCallback((title: string) => {
+    const addTodolist = useCallback(async (title: string) => {
         // const newTodolistID = v1()
         // const newTodolist: TodolistType = {
         //     id: newTodolistID,
@@ -95,7 +95,7 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
         // setTodoLists([...todoLists, newTodolist])
         // setTasks({...tasks, [newTodolistID]: []})
         //let id = v1()
-        dispatch(createTodListTC(title))
+        await dispatch(createTodListTC(title))
     }, [dispatch])
 
     const filterTasks = useCallback((todoListID: string, filter: WordFilter) => {
