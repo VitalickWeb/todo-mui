@@ -3,7 +3,7 @@ import {
     deleteTodListTC,
     fetchTodoListsThunk,
     filterTodoListAC,
-    updateTodListTitleTC,
+    updateTodoListTitleTC,
     WordFilter
 } from "./todoList-reducers";
 import React, {useCallback, useEffect} from "react";
@@ -82,7 +82,7 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
     const changeTodolistTitle = useCallback(async (todoListID: string, title: string) => {
         // setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title} : tl))
         // setFilter(filter)
-        await dispatch(updateTodListTitleTC(title, todoListID))
+        await dispatch(updateTodoListTitleTC(title, todoListID))
     }, [dispatch])
 
     const addTodolist = useCallback(async (title: string) => {

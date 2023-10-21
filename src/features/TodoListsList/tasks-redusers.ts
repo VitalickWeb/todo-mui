@@ -5,8 +5,6 @@ import {AppRootStateType} from "../../app/store";
 import {RequestStatusType, SetErrorAT, setStatusAC, SetStatusAT} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import axios from "axios";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 const initialState: TasksStateType = {}
 
@@ -81,6 +79,7 @@ export const setTasksAC = (tasksApi: TaskApiType[], todoListIdApi: string) => ({
 export const ChangeTaskEntityStatusAC = (todoListID: string, taskId: string, status: RequestStatusType) => ({
         type: "CHANGE-TASKS-ENTITY-STATUS", todoListID, taskId, status}
 ) as const
+
 // Thunks
 export const fetchTasksThunk = (todoListID: string) => async (dispatch: Dispatch<TaskActionsType>) => {
     dispatch(setStatusAC('loading'))
@@ -115,6 +114,7 @@ export const deleteTaskTC = (todoListID: string, taskId: string) => async (dispa
         if (res.data.resultCode === ResultCode.SUCCESS) {
             dispatch(removeTaskAC(todoListID, taskId))
             dispatch(setStatusAC('succeeded'))
+            dispatch(ChangeTaskEntityStatusAC(todoListID, taskId, 'succeeded'))
         } else {
             handleServerAppError(res.data, dispatch)
         }
@@ -147,17 +147,17 @@ export const createTaskTC = (title: string, todoListID: string) => async (dispat
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)
-            return Promise.reject(error); // Вернуть Promise с ошибкой
+            return;
         }
         const error = (e as Error).message
         handleServerNetworkError(error, dispatch)
-        return Promise.reject(error); // Вернуть Promise с ошибкой
     }
 }
 
 export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>
     async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
-        const task = getState().tasks[todoListID].find((t) => t.id === taskId)
+
+    const task = getState().tasks[todoListID].find((t) => t.id === taskId)
 
         if (!task) {
             console.log('task not found')
@@ -175,6 +175,7 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
 
         dispatch(setStatusAC('loading'))
         dispatch(ChangeTaskEntityStatusAC(todoListID, taskId, 'loading'))
+
         try {
             const res = await taskAPI.updateTasks(todoListID, taskId, model)
 
@@ -195,7 +196,6 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
             handleServerNetworkError(error, dispatch)
         }
     }
-
 
 export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string) =>
     async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
@@ -263,7 +263,7 @@ export type TaskDomainType = TaskApiType & {
     entityStatus: RequestStatusType
 }
 
-//типизация ошибок
+//type error
 export type ErrorType = {
     'statusCode': number
     messages: [
@@ -274,4 +274,3 @@ export type ErrorType = {
     ]
     'error': string
 }
-//type ThunkDispatch = Dispatch<TaskActionsType | AppActionsType | ErrorUtilsDispatchType>

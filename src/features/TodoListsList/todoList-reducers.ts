@@ -84,7 +84,8 @@ export const fetchTodoListsThunk = () => async (dispatch: Dispatch) => {
             dispatch(setStatusAC('succeeded'))
         })
 
-    } catch (e) {
+    }
+    catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)
@@ -105,11 +106,13 @@ export const deleteTodListTC = (todoListID: string) => async (dispatch: Dispatch
         if (res.data.resultCode === ResultCode.SUCCESS) {
             dispatch(removeTodoListAC(todoListID));
             dispatch(setStatusAC('succeeded'))
+                //dispatch(changeTodoListEntityStatusAC(todoListID, 'succeeded'))
         } else {
             handleServerAppError(res.data, dispatch)
         }
 
-    } catch (e) {
+    }
+    catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)
@@ -133,7 +136,8 @@ export const createTodListTC = (title: string) => async (dispatch: Dispatch) => 
             handleServerAppError(res.data, dispatch)
         }
 
-    } catch (e) {
+    }
+    catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)
@@ -143,8 +147,9 @@ export const createTodListTC = (title: string) => async (dispatch: Dispatch) => 
         handleServerNetworkError(error, dispatch)
     }
 }
-export const updateTodListTitleTC = (title: string, todoListID: string) => async (dispatch: Dispatch) => {
+export const updateTodoListTitleTC = (title: string, todoListID: string) => async (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
+    dispatch(changeTodoListEntityStatusAC(todoListID, 'loading'))
 
     try {
 
@@ -153,11 +158,13 @@ export const updateTodListTitleTC = (title: string, todoListID: string) => async
         if (res.data.resultCode === ResultCode.SUCCESS) {
             dispatch(changeTodoListTitleAC(title, todoListID));
             dispatch(setStatusAC('succeeded'))
+            dispatch(changeTodoListEntityStatusAC(todoListID, 'succeeded'))
         } else {
             handleServerAppError(res.data, dispatch)
         }
 
-    } catch (e) {
+    }
+    catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             const error = e.response ? e.response.data.messages[0].message : e.message
             handleServerNetworkError(error, dispatch)

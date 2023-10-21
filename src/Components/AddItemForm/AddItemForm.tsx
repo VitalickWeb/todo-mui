@@ -47,7 +47,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) =>
                 disabled={props.disabled}
             />
 
-            <Button style={ {
+            <Button style={{
                 width: "20px",
                 height: "40px",
                 marginLeft: "5px"
@@ -56,8 +56,8 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) =>
                 size={'small'}
                 variant={'contained'}
                 color={'primary'}
-                disabled={props.disabled}>+
-            </Button>
+                disabled={props.disabled}
+            >+</Button>
         </div>
     )
 })
