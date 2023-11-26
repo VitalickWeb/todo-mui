@@ -17,8 +17,9 @@ export type TaskPropsType = {
 }
 
 export const Task = React.memo(({
-                                    task, todoListID, entityStatus,
-                                    removeTask, changeTaskTitle, changeStatus, disabled
+                                    task, todoListID,
+                                    removeTask, changeTaskTitle,
+                                    changeStatus, disabled
                                 }: TaskPropsType) => {
 
     const clickRemoveHandler = useCallback(() => {

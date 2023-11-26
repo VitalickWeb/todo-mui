@@ -14,6 +14,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export const ErrorSnackbar = () => {
     const error = useSelector<AppRootStateType, string | null>( (state) => state.app.error)
+    console.log(error)
     let dispatch = useDispatch()
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

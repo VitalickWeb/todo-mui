@@ -78,12 +78,9 @@ export const fetchTodoListsThunk = () => async (dispatch: Dispatch) => {
     dispatch(setStatusAC('loading'))
 
     try {
-
-        const res = await todolistAPI.getTodoLists().then((res) => {
+        const res = await todolistAPI.getTodoLists()
             dispatch(setTodoListsAC(res.data));
             dispatch(setStatusAC('succeeded'))
-        })
-
     }
     catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
