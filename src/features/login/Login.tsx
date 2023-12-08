@@ -1,27 +1,12 @@
 import React from 'react'
 import { Grid, FormControl, FormLabel, FormGroup, TextField, FormControlLabel, Checkbox, Button } from '@material-ui/core';
 import {useFormik} from "formik";
+import {useDarkStyleForm} from "../../styleForm/useDarkStyleForm";
 
 
 export const Login = () => {
 
-    const styles = {
-        backgroundColor: 'transparent',
-        borderColor: 'white',
-    };
-
-    const InputLabelProps = {
-        style: { color: 'lightGrey' }, // Заменит на нужный цвет
-    }
-
-    const InputProps = {
-        style: {
-            backgroundColor: styles.backgroundColor,
-            '&:not(:focus)': {
-                borderColor: styles.borderColor,
-            },
-        },
-    };
+    const {InputLabelProps, InputProps} = useDarkStyleForm()
 
     const formik = useFormik({
         initialValues: {
