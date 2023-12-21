@@ -1,12 +1,32 @@
 import React from 'react'
-import { Grid, FormControl, FormLabel, FormGroup, TextField, FormControlLabel, Checkbox, Button } from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Grid,
+    TextField
+} from '@material-ui/core';
 import {useFormik} from "formik";
 import {useDarkStyleForm} from "../../styleForm/useDarkStyleForm";
-
+import {loginTC} from "./auth-reducer";
+import {useAppDispatch} from "../../app/store";
+import {useSelector} from "react-redux";
 
 export const Login = () => {
 
+    //const isLogged = useSelector(state => state.auth.isLoggedIn)
+    const dispatch = useAppDispatch()
+
     const {InputLabelProps, InputProps} = useDarkStyleForm()
+
+    type FormikErrorType = {
+        email?: string
+        password?: string
+        rememberMe?: boolean
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -14,8 +34,28 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
+        validate: (values) => {
+            const errors: FormikErrorType = {}
+
+            if (!values.email) {
+                errors.email = 'Required'
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address'
+            }
+
+            if (!values.password) {
+                errors.password = 'Required';
+            } else if (values.password.length < 3) {
+                errors.password = 'Must be 3 characters or more';
+            }
+
+            return errors
+        },
+
         onSubmit: values => {
-            alert(JSON.stringify(values));
+            //alert(JSON.stringify(values));
+            dispatch(loginTC(values))
+            formik.resetForm()
         },
     })
 
@@ -39,15 +79,30 @@ export const Login = () => {
                         margin="normal"
                         InputLabelProps={InputLabelProps}
                         InputProps={InputProps}
+
+                        {...formik.getFieldProps('email')}
                     />
+
+                    {formik.errors.email ? <div style={{color: 'red'}}>{formik.errors.email}</div> : null}
+
                     <TextField
                         type="password"
                         label="Password"
                         margin="normal"
                         InputLabelProps={InputLabelProps}
                         InputProps={InputProps}
+
+                        {...formik.getFieldProps('password')}
                     />
-                    <FormControlLabel label={'Remember me'} control={<Checkbox/>}/>
+
+                    {formik.errors.password ? <div style={{color: 'red'}}>{formik.errors.password}</div> : null}
+
+                    <FormControlLabel
+                        label={'Remember me'}
+                        control={<Checkbox/>}
+                        onChange={formik.handleChange}
+                        checked={formik.values.rememberMe}
+                    />
                     <Button style={{backgroundColor: "limegreen"}} type={'submit'} variant={'contained'} >
                         Login
                     </Button>

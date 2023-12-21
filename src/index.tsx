@@ -37,7 +37,7 @@ root.render(
                 <CssBaseline/>
                 <App/>
             </Provider>
-        </ThemeProvider>,
+        </ThemeProvider>
     </BrowserRouter>
 );
 

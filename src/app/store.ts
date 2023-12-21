@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {tasksReducer} from "../features/TodoListsList/tasks-redusers";
 import {todoListReducers} from "../features/TodoListsList/todoList-reducers";
 import {appReducer} from "./app-reducer";
+import {authReducer} from "../features/login/auth-reducer";
 
 // Поэтому, первым шагом, создадим еще один редьюсер для обработки состояния каких-то аспектов,
 // касающихся всего приложения, таких как: выбранный язык интерфейса, загружаются ли данные
@@ -17,6 +18,7 @@ export const rootReducer = combineReducers({
     app: appReducer,
     tasks: tasksReducer,
     todoLists: todoListReducers,
+    auth: authReducer
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))

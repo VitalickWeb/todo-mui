@@ -38,6 +38,7 @@ export const todoListReducers = (state: TodolistType[] = initialState, action: T
         case "ADD-TODOLIST":
             const newTodoList: TodoListDomainType = {...action.todoListID, filter: 'all', entityStatus: 'idle'}
             return [newTodoList, ...state]
+
         case "CHANGE-TODOLIST-TITLE":
             return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
         case "CHANGE-TODOLIST-FILTER":

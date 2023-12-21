@@ -2,6 +2,38 @@ import axios, {AxiosResponse} from 'axios'
 
 //у axios есть метод create для того что бы задавать какие то базовые настройки
 //которые будут использоваться ко всем запросам.
+const instanceAuth = axios.create({
+    baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+    withCredentials: true,
+    // headers: {
+    //     // Не забываем заменить API-KEY на собственный
+    //     'API-KEY': '794181ab-6d62-4cfb-bc9f-d539dfac55f1',
+    // },
+})
+
+//Types
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    // captcha: boolean
+}
+
+type LoginResponseType = {
+    resultCode: number
+    messages: [],
+    data: {
+        userId: number
+    }
+}
+
+//API
+export const authAPI = {
+    login({email, password, rememberMe}: LoginParamsType): Promise<AxiosResponse> {
+        return instanceAuth.post<LoginResponseType>('/auth/login', {email, password, rememberMe})
+    }
+}
+
 const instanceTodo = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
@@ -99,7 +131,8 @@ export type UpdateTaskModelType = {
 
 // api
 export const taskAPI = {
-    getTasks(todolistId: string): Promise<AxiosResponse<ResponseGetTaskType<TaskApiType[]>>> {
+    getTasks(todolistId: string):
+        Promise<AxiosResponse<ResponseGetTaskType<TaskApiType[]>>> {
         return instanceTask.get(`todo-lists/${todolistId}/tasks`)
     },
     createTasks(todolistId: string, title: string) {
@@ -109,10 +142,12 @@ export const taskAPI = {
     deleteTasks(todoListId: string, taskId: string) {
         return instanceTask.delete<any, AxiosResponse<ResponseType>>(`todo-lists/${todoListId}/tasks/${taskId}`)
     },
-    updateTasks(todoListID: string, taskId: string, model: UpdateTaskModelType): Promise<AxiosResponse<ResponseType>> {
+    updateTasks(todoListID: string, taskId: string, model: UpdateTaskModelType):
+        Promise<AxiosResponse<ResponseType>> {
         return instanceTask.put(`todo-lists/${todoListID}/tasks/${taskId}`, model)
     },
-    updateTaskTitle(todoListID: string, taskId: string, model: UpdateTaskModelType): Promise<AxiosResponse<ResponseType>> {
+    updateTaskTitle(todoListID: string, taskId: string, model: UpdateTaskModelType):
+        Promise<AxiosResponse<ResponseType>> {
         return instanceTask.put(`todo-lists/${todoListID}/tasks/${taskId}`, model)
     }
 }
