@@ -12,12 +12,13 @@ import {
 import {useFormik} from "formik";
 import {useDarkStyleForm} from "../../styleForm/useDarkStyleForm";
 import {loginTC} from "./auth-reducer";
-import {useAppDispatch} from "../../app/store";
+import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {useSelector} from "react-redux";
 
 export const Login = () => {
 
-    //const isLogged = useSelector(state => state.auth.isLoggedIn)
+    const isLogged = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    console.log(isLogged)
     const dispatch = useAppDispatch()
 
     const {InputLabelProps, InputProps} = useDarkStyleForm()
@@ -100,8 +101,8 @@ export const Login = () => {
                     <FormControlLabel
                         label={'Remember me'}
                         control={<Checkbox/>}
-                        onChange={formik.handleChange}
-                        checked={formik.values.rememberMe}
+
+                        {...formik.getFieldProps('rememberMe')}
                     />
                     <Button style={{backgroundColor: "limegreen"}} type={'submit'} variant={'contained'} >
                         Login

@@ -8,6 +8,7 @@ import {ErrorType} from "../TodoListsList/tasks-redusers";
 const initialState = {
     isLoggedIn: false
 }
+
 type InitialStateType = typeof initialState
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
