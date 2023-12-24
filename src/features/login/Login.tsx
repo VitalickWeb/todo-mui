@@ -14,11 +14,12 @@ import {useDarkStyleForm} from "../../styleForm/useDarkStyleForm";
 import {loginTC} from "./auth-reducer";
 import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {useSelector} from "react-redux";
+import {Navigate} from "react-router-dom";
 
 export const Login = () => {
 
     const isLogged = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
-    console.log(isLogged)
+
     const dispatch = useAppDispatch()
 
     const {InputLabelProps, InputProps} = useDarkStyleForm()
@@ -59,6 +60,10 @@ export const Login = () => {
             formik.resetForm()
         },
     })
+
+    if (isLogged) {
+        return <Navigate to={'/'}/>
+    }
 
     return <Grid container justifyContent={'center'}>
         <Grid container justifyContent={'center'}>

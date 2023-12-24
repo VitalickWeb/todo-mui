@@ -21,6 +21,7 @@ import {Grid, Paper} from "@material-ui/core";
 import {Todolist} from "./TodoList/Todolist";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
 import {RequestStatusType} from "../../app/app-reducer";
+import {Navigate} from "react-router-dom";
 
 export type TodolistType = {
     id: string
@@ -37,10 +38,15 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
 
     const todoLists = useSelector<AppRootStateType, TodolistType[]>( state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TasksStateType>( state => state.tasks)
+    const isLogged = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
+        if (!isLogged) {
+            return;
+        }
+
         dispatch(fetchTodoListsThunk());
     }, [])
 
@@ -107,6 +113,10 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
     //UI:
     const todoListsComponents = todoLists.map((tl: TodolistType) => {
         let filteredTasks: Array<TaskDomainType> = tasks[tl.id];
+
+        if (!isLogged) {
+            return <Navigate to={'/login'}/>
+        }
 
         return (
             <Grid item key={tl.id}>
