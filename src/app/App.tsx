@@ -1,11 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar, Typography} from "@material-ui/core";
+import {
+    AppBar,
+    Button,
+    CircularProgress,
+    Container,
+    IconButton,
+    LinearProgress,
+    Toolbar,
+    Typography
+} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {TodoListsList} from "../features/TodoListsList/TodoListsList";
 import {useSelector} from "react-redux";
-import {AppRootStateType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {AppRootStateType, useAppDispatch} from "./store";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/login/Login";
@@ -38,6 +47,20 @@ export function App() {
     // })
 
     const status = useSelector<AppRootStateType, RequestStatusType>( (state) => state.app.status)
+    const isInitialized = useSelector<AppRootStateType, boolean>( (state) => state.app.isInitial)
+
+    const dispatch = useAppDispatch()
+
+    useEffect( () => {
+        dispatch(initializeAppTC())
+    })
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <>

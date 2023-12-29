@@ -16,7 +16,6 @@ export type LoginParamsType = {
     email: string
     password: string
     rememberMe: boolean
-    // captcha: boolean
 }
 
 type LoginResponseType = {
@@ -27,12 +26,26 @@ type LoginResponseType = {
     }
 }
 
+export type authMeType = {
+    resultCode: number
+    messages: []
+    data: {
+        id: number
+        email: string
+        login: string
+    }
+}
+
 //API
 export const authAPI = {
     login({email, password, rememberMe}: LoginParamsType): Promise<AxiosResponse> {
         return instanceAuth.post<LoginResponseType>('/auth/login', {email, password, rememberMe})
+    },
+    me(): Promise<AxiosResponse>{
+        return instanceAuth.get<authMeType>('auth/me')
     }
 }
+
 
 const instanceTodo = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',

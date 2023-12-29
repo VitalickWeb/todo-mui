@@ -46,7 +46,6 @@ export const TodoListsList: React.FC<TodoListsListPropsType> = () => {
         if (!isLogged) {
             return;
         }
-
         dispatch(fetchTodoListsThunk());
     }, [])
 

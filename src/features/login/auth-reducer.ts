@@ -50,6 +50,6 @@ export const loginTC = (data: LoginParamsType) =>
 }
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusAT | SetErrorAT
+export type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusAT | SetErrorAT
 
 
