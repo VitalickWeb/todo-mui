@@ -16,6 +16,7 @@ export type LoginParamsType = {
     email: string
     password: string
     rememberMe: boolean
+    captcha?: string
 }
 
 type LoginResponseType = {
@@ -36,13 +37,21 @@ export type authMeType = {
     }
 }
 
+export type logoutResponseType = {
+    resultCode: number
+    messages: string[],
+    data: {}
+}
 //API
 export const authAPI = {
-    login({email, password, rememberMe}: LoginParamsType): Promise<AxiosResponse> {
-        return instanceAuth.post<LoginResponseType>('/auth/login', {email, password, rememberMe})
+    login(data: LoginParamsType): Promise<AxiosResponse> {
+        return instanceAuth.post<ResponseType<{userId?: number}>>('auth/login', data)
     },
-    me(): Promise<AxiosResponse>{
-        return instanceAuth.get<authMeType>('auth/me')
+    me() {
+        return instanceAuth.get<ResponseType<{id: number, email: string, login: string}>>('auth/me')
+    },
+    logout() {
+        return instanceAuth.delete<ResponseType>('auth/login')
     }
 }
 

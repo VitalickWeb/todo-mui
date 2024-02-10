@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux'
-import {SetErrorAT, setStatusAC, SetStatusAT} from '../../app/app-reducer'
+import {SetErrorAT, SetIsLoggedInAT, setStatusAC, SetStatusAT} from '../../app/app-reducer'
 import {authAPI, LoginParamsType, ResultCode, TaskApiType} from "../../API/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import axios from "axios";
@@ -49,7 +49,30 @@ export const loginTC = (data: LoginParamsType) =>
     }
 }
 
+export const logoutTC = () =>
+    async (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC('loading'))
+
+    let res = await authAPI.logout()
+
+    try {
+        if (res.data.resultCode === ResultCode.SUCCESS) {
+            dispatch(setIsLoggedInAC(false))
+            dispatch(setStatusAC('succeeded'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    }
+    catch (e) {
+        const error = (e as Error).message
+        handleServerNetworkError(error, dispatch)
+    }
+}
+
 // types
-export type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusAT | SetErrorAT
+export type ActionsType = ReturnType<typeof setIsLoggedInAC>
+    | SetStatusAT
+    | SetErrorAT
+    | SetIsLoggedInAT
 
 

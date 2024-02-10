@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {authAPI} from "../API/todolist-api";
+import {setIsLoggedInAC} from "../features/login/auth-reducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -17,7 +18,7 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
             return {...state, status: action.status}
         case 'APP/SET-ERROR':
             return {...state, error: action.error}
-        case 'APP/SET-IS-LOGGED-IN':
+        case 'APP/SET-IS-INITIALIZED':
             return {...state, isInitial: action.isInit}
 
         default:
@@ -27,22 +28,23 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
 
 export const setStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
 export const setErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const)
-export const setIsLoggedAC = (isInit: boolean) => ({type: 'APP/SET-IS-LOGGED-IN', isInit} as const)
+export const setIsInitializedAC = (isInit: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInit} as const)
 
 export const initializeAppTC = () => async (dispatch: Dispatch) => {
 
     let res = await authAPI.me()
 
     if (res.data.resultCode === 0) {
-        dispatch(setIsLoggedAC(true));
+        dispatch(setIsLoggedInAC(true))
     } else {
-        dispatch(setIsLoggedAC(false))
+        dispatch(setIsLoggedInAC(false))
     }
+    dispatch(setIsInitializedAC(true))
 }
 
 export type SetStatusAT = ReturnType<typeof setStatusAC>
 export type SetErrorAT = ReturnType<typeof setErrorAC>
-export type SetIsLoggedInAT = ReturnType<typeof setIsLoggedAC>
+export type SetIsLoggedInAT = ReturnType<typeof setIsInitializedAC>
 
 export type AppActionsType =
     | SetStatusAT

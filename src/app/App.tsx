@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {
     AppBar,
@@ -18,8 +18,14 @@ import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/login/Login";
+import {logoutTC} from "../features/login/auth-reducer";
 
-
+//Алгоритм работы авторизации
+//1) Когда APP отрисуется первый раз, в isInitialized будет сидеть false и мы будем видеть preloader
+//2) Задиспатчится thuk которая сделает запрос на me и будет ждать ответа, когда отсвет придет
+// этот ответ задиспатчится, изменит редьюсер, который заставит перерисовать APP. State изменится
+// поэтому APP перерисуется,  if (!isInitialized) придет true и useEffect больше не сработает потому что
+// зависимость пустая, но в инициализации уже будет true поэтому покажется приложение.
 export function App() {
     // const todoListID1 = v1()
     // const todoListID2 = v1()
@@ -48,14 +54,19 @@ export function App() {
 
     const status = useSelector<AppRootStateType, RequestStatusType>( (state) => state.app.status)
     const isInitialized = useSelector<AppRootStateType, boolean>( (state) => state.app.isInitial)
+    const isLogged = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const dispatch = useAppDispatch()
 
     useEffect( () => {
         dispatch(initializeAppTC())
-    })
+    }, [])
 
-    if (!isInitialized) {
+    const clickLogout = useCallback(() => {
+        dispatch(logoutTC())
+    }, [])
+
+    if (!isInitialized) {//false
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
@@ -75,7 +86,14 @@ export function App() {
                         <Typography variant="h6">
                             Todo-Lists
                         </Typography>
-                        <Button color="inherit" variant={"outlined"}>Login</Button>
+                        {isLogged &&
+                            <Button
+                                color="inherit"
+                                variant={"outlined"}
+                                onClick={clickLogout}
+                            >Log out
+                            </Button>
+                        }
                     </Toolbar>
 
                 </AppBar>
@@ -86,7 +104,7 @@ export function App() {
 
                     <Routes>
                         <Route path = '/' element = {<TodoListsList />}/>
-                        <Route path = '/Login' element = {<Login/>}/>
+                        <Route path = '/login' element = {<Login />}/>
 
                         <Route path = '/404' element={<h1>404: PAGE NOT FOUND</h1>}/>
                         <Route path='*' element={<Navigate to='/404'/>} />
