@@ -27,30 +27,6 @@ import {logoutTC} from "../features/login/auth-reducer";
 // поэтому APP перерисуется,  if (!isInitialized) придет true и useEffect больше не сработает потому что
 // зависимость пустая, но в инициализации уже будет true поэтому покажется приложение.
 export function App() {
-    // const todoListID1 = v1()
-    // const todoListID2 = v1()
-    //
-    // const [todoLists, dispatchToTodoLists] = useReducer(todoListReducers, [
-    //     {id: todoListID1, title: 'what to learn', filter: 'all'},
-    //     {id: todoListID2, title: 'what to buy', filter: 'all'},
-    // ])
-    //
-    // const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
-    //     [todoListID1]: [
-    //         {id: v1(), title: "HTML&CSS", isDone: true},
-    //         {id: v1(), title: "JS", isDone: true},
-    //         {id: v1(), title: "ReactJS", isDone: false},
-    //         {id: v1(), title: "Rest API", isDone: false},
-    //         {id: v1(), title: "GraphQL", isDone: false},
-    //     ],
-    //     [todoListID2]: [
-    //         {id: v1(), title: "Bread", isDone: true},
-    //         {id: v1(), title: "Milk", isDone: true},
-    //         {id: v1(), title: "String", isDone: false},
-    //         {id: v1(), title: "Bike", isDone: false},
-    //         {id: v1(), title: "Guitar", isDone: false},
-    //     ],
-    // })
 
     const status = useSelector<AppRootStateType, RequestStatusType>( (state) => state.app.status)
     const isInitialized = useSelector<AppRootStateType, boolean>( (state) => state.app.isInitial)

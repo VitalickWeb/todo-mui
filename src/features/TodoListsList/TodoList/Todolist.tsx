@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {AddItemForm} from "../../../Components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../Components/EditableSpan/EditableSpan";
 import {Button, List, PropTypes} from "@material-ui/core";
 import {Task} from "./Task/Task";
 import {WordFilter} from "../todoList-reducers";
-import {fetchTasksThunk, TaskDomainType} from "../tasks-redusers";
+import {TaskDomainType} from "../tasks-redusers";
 import {useAppDispatch} from "../../../app/store";
 import {TaskStatuses} from "../../../API/todolist-api";
 import {RequestStatusType} from "../../../app/app-reducer";
@@ -32,11 +32,11 @@ export const Todolist = React.memo(({
     entityStatus,
 }: TasksPropsType) => {
 
-    const dispatch = useAppDispatch()
+    //const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchTasksThunk(todoListID));
-    }, [todoListID])
+    // useEffect(() => {
+    //     dispatch(fetchTasksThunk(todoListID));
+    // }, [todoListID])
 
     let filteredTasks = tasks;
 

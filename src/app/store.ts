@@ -3,12 +3,12 @@
 
 import {AnyAction, applyMiddleware, combineReducers, legacy_createStore} from "redux";
 
-import thunk, {ThunkDispatch} from "redux-thunk";
+import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {useDispatch} from "react-redux";
-import {tasksReducer} from "../features/TodoListsList/tasks-redusers";
-import {todoListReducers} from "../features/TodoListsList/todoList-reducers";
-import {appReducer} from "./app-reducer";
-import {authReducer} from "../features/login/auth-reducer";
+import {TaskActionsType, tasksReducer} from "../features/TodoListsList/tasks-redusers";
+import {TodoListActionsType, todoListReducers} from "../features/TodoListsList/todoList-reducers";
+import {AppActionsType, appReducer} from "./app-reducer";
+import {AuthActionsType, authReducer} from "../features/login/auth-reducer";
 
 // Поэтому, первым шагом, создадим еще один редьюсер для обработки состояния каких-то аспектов,
 // касающихся всего приложения, таких как: выбранный язык интерфейса, загружаются ли данные
@@ -23,13 +23,15 @@ export const rootReducer = combineReducers({
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 
+export type AppRootStateType = ReturnType<typeof rootReducer>
+
 type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
 
+//все типы actions для всего app
+export type ForAllAppActionsType = TodoListActionsType | TaskActionsType | AppActionsType | AuthActionsType
 
-//export const AppActionsType = TodoListActionsType | TaskActionsType
-
-export type AppRootStateType = ReturnType<typeof rootReducer>
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, ForAllAppActionsType>
 
 // @ts-ignore
 window.store = store

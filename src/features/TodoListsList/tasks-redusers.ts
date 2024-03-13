@@ -1,7 +1,7 @@
 import {AddTodoListAT, RemoveTodoListAT, SetTodoListsAT} from "../TodoListsList/todoList-reducers";
 import {ResultCode, taskAPI, TaskApiType, TaskStatuses, UpdateTaskModelType} from "../../API/todolist-api";
 import {Dispatch} from "redux";
-import {AppRootStateType} from "../../app/store";
+import {AppRootStateType, AppThunk, ForAllAppActionsType} from "../../app/store";
 import {RequestStatusType, SetErrorAT, setStatusAC, SetStatusAT} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import axios from "axios";
@@ -81,7 +81,7 @@ export const ChangeTaskEntityStatusAC = (todoListID: string, taskId: string, sta
 ) as const
 
 // Thunks
-export const fetchTasksThunk = (todoListID: string) => async (dispatch: Dispatch<TaskActionsType>) => {
+export const fetchTasksThunk = (todoListID: string): AppThunk => async dispatch => {
     dispatch(setStatusAC('loading'))
 
     try {
@@ -104,7 +104,7 @@ export const fetchTasksThunk = (todoListID: string) => async (dispatch: Dispatch
         handleServerNetworkError(error, dispatch)
     }
 }
-export const deleteTaskTC = (todoListID: string, taskId: string) => async (dispatch: Dispatch<TaskActionsType>) => {
+export const deleteTaskTC = (todoListID: string, taskId: string): AppThunk => async dispatch => {
     dispatch(setStatusAC('loading'))
     dispatch(ChangeTaskEntityStatusAC(todoListID, taskId, 'loading'))
 
@@ -130,7 +130,7 @@ export const deleteTaskTC = (todoListID: string, taskId: string) => async (dispa
     }
 }
 
-export const createTaskTC = (title: string, todoListID: string) => async (dispatch: Dispatch<TaskActionsType>) => {
+export const createTaskTC = (title: string, todoListID: string): AppThunk => async dispatch => {
     dispatch(setStatusAC('loading'))
 
     try {
@@ -154,8 +154,8 @@ export const createTaskTC = (title: string, todoListID: string) => async (dispat
     }
 }
 
-export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses) =>
-    async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
+export const updateTaskStatusTC = (todoListID: string, taskId: string, status: TaskStatuses): AppThunk =>
+    async (dispatch, getState: () => AppRootStateType) => {
 
     const task = getState().tasks[todoListID].find((t) => t.id === taskId)
 
@@ -197,8 +197,8 @@ export const updateTaskStatusTC = (todoListID: string, taskId: string, status: T
         }
     }
 
-export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string) =>
-    async (dispatch: Dispatch<TaskActionsType>, getState: () => AppRootStateType) => {
+export const updateTaskTitleTC = (todoListID: string, taskId: string, newTitle: string): AppThunk =>
+    async (dispatch, getState: () => AppRootStateType) => {
         dispatch(setStatusAC('loading'))
         dispatch(ChangeTaskEntityStatusAC(todoListID, taskId, 'loading'))
 
